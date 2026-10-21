@@ -219,7 +219,7 @@ export async function POST(req: NextRequest) {
       resend.emails.send({
         from: fromEmail,
         to: [toEmail],
-        reply_to: data.email,
+        replyTo: data.email,
         subject: `[Inquiry] ${data.service} - ${data.fullName}`,
         html: adminHtml,
       }),
