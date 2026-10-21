@@ -235,7 +235,7 @@ export async function POST(req: NextRequest) {
       success: true,
       message: "Thank you! We will contact you shortly.",
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[Contact API Error]:", err);
     return NextResponse.json(
       {

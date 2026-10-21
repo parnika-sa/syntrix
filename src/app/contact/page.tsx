@@ -8,9 +8,7 @@ import {
   Clock, 
   MessageCircle, 
   Globe2, 
-  ArrowRight, 
   Sparkles, 
-  CheckCircle2, 
   Calendar, 
   FileText, 
   Rocket 

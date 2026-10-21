@@ -9,8 +9,7 @@ import {
   AlertCircle, 
   Loader2, 
   Sparkles, 
-  MessageCircle, 
-  ArrowRight 
+  MessageCircle 
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { company } from "@/data/company";
@@ -169,12 +168,13 @@ export default function ContactForm() {
         honeypot: "",
       });
       setErrors({});
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Form submission error:", err);
-      setServerError(
-        err.message ||
-          "Could not send your message. Please WhatsApp us directly."
-      );
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Could not send your message. Please WhatsApp us directly.";
+      setServerError(msg);
     } finally {
       setIsSubmitting(false);
     }
