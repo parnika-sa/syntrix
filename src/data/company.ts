@@ -1,0 +1,36 @@
+export const company = {
+  name: "Syntrixmesh Solutions",
+  shortName: "Syntrixmesh",
+  tagline: "Software · Web · IT Infrastructure",
+  brandLine: "End-to-End Technology & Growth Partner",
+  founder: {
+    name: "Manmeet Singh",
+    role: "Founder & Principal Technology Architect",
+    bio: "Passionate technologist and software engineer leading Syntrixmesh Solutions from Ludhiana, Punjab. Architecting mission-critical web platforms, intelligent automation systems, and resilient enterprise IT setups for businesses worldwide.",
+  },
+  contact: {
+    phone: "+91 80540 80370",
+    phoneClean: "+918054080370",
+    whatsapp: "https://wa.me/918054080370?text=Hi%20Syntrixmesh%20Solutions%2C%20I%20want%20to%20discuss%20a%20project",
+    email: "info@syntrixmeshsolutions.com",
+    address: {
+      street: "Vill. Jhande",
+      city: "Ludhiana",
+      state: "Punjab",
+      pincode: "142021",
+      country: "India",
+      full: "Vill. Jhande, Ludhiana, Punjab, 142021, India",
+    },
+    workingHours: "Mon - Sat, 10:00 AM - 7:00 PM IST",
+    workingDays: "Monday through Saturday",
+    responseTime: "Guaranteed Response within 2 to 4 Hours",
+    deliveryScope: "Ludhiana-based, Global Delivery",
+  },
+  domain: "https://www.syntrixmeshsolutions.com",
+  socials: {
+    linkedin: "https://linkedin.com/company/syntrixmesh-solutions",
+    twitter: "https://twitter.com/syntrixmesh",
+    github: "https://github.com/syntrixmesh",
+    instagram: "https://instagram.com/syntrixmeshsolutions",
+  },
+};
