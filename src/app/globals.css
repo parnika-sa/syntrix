@@ -170,3 +170,39 @@ html.lenis, html.lenis body {
   top: 1rem;
 }
 
+/* Subtle Hero Mesh Grid */
+.bg-hero-mesh {
+  background-image: 
+    linear-gradient(to right, rgba(47, 184, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(47, 184, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+/* Very light CSS-only noise texture */
+.noise-overlay {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Global Delivery Route Flow Animation */
+@keyframes routeFlow {
+  0% {
+    stroke-dashoffset: 340;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-route-flow {
+  animation: routeFlow 4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-route-flow {
+    animation: none !important;
+  }
+}
+

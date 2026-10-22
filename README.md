@@ -3,7 +3,7 @@
 > **End-to-End Technology & Growth Partner**  
 > *Software · Web · IT Infrastructure*
 
-Official web platform for **Syntrixmesh Solutions**, founded by **Manmeet Singh** and headquartered in Vill. Jhande, Ludhiana, Punjab, India (with global client delivery).
+Official web platform for **Syntrixmesh Solutions**, founded by **Manmeet Singh** and headquartered in Jhande, Ludhiana, Punjab, India (with global client delivery).
 
 ---
 
@@ -28,7 +28,7 @@ Official web platform for **Syntrixmesh Solutions**, founded by **Manmeet Singh*
 
 ```
 syntrix/
-├── public/                 # Static assets (logo.svg, logo.png, etc.)
+├── public/                 # Static assets (logo.png, favicon.png, og-image.png)
 ├── src/
 │   ├── app/
 │   │   ├── api/contact/    # Contact form API route with Zod, rate limiting, and Resend
@@ -111,5 +111,5 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Founder**: Manmeet Singh (Founder & Principal Technology Architect)
 - **Phone / WhatsApp**: +91 80540 80370
 - **Email**: info@syntrixmeshsolutions.com
-- **Headquarters**: Vill. Jhande, Ludhiana, Punjab, 142021, India
+- **Headquarters**: Jhande, Ludhiana, Punjab, 142021, India
 - **Global Delivery**: Serving clients across India, North America, Europe, UAE & APAC

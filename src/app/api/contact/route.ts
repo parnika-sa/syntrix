@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
 
         <div style="background: #050811; padding: 16px 24px; text-align: center; border-top: 1px solid #1E2D54;">
           <p style="margin: 0; color: #64748B; font-size: 12px;">
-            Syntrixmesh Solutions · Vill. Jhande, Ludhiana, Punjab, 142021
+            Syntrixmesh Solutions · Jhande, Ludhiana, Punjab, 142021
           </p>
         </div>
       </div>

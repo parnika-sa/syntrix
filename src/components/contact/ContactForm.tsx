@@ -63,6 +63,8 @@ const slugToService: Record<string, string> = {
 export default function ContactForm() {
   const searchParams = useSearchParams();
   const queryService = searchParams.get("service");
+  const queryType = searchParams.get("type");
+  const queryTimeline = searchParams.get("timeline");
 
   const [formData, setFormData] = useState<FormState>({
     fullName: "",
@@ -79,20 +81,34 @@ export default function ContactForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  // Pre-select service from URL query parameter if present
+  // Pre-select service, type, and timeline from URL query parameters
   useEffect(() => {
+    let serviceValue = "";
     if (queryService) {
-      const mapped = slugToService[queryService.toLowerCase()] || queryService;
+      const firstService = queryService.split(",")[0].trim();
+      const mapped = slugToService[firstService.toLowerCase()] || firstService;
       const found = serviceOptions.find(
         (opt) =>
           opt.value.toLowerCase() === mapped.toLowerCase() ||
-          opt.label.toLowerCase() === mapped.toLowerCase()
+          opt.label.toLowerCase() === mapped.toLowerCase() ||
+          opt.value.toLowerCase().includes(mapped.toLowerCase())
       );
       if (found) {
-        setFormData((prev) => ({ ...prev, service: found.value }));
+        serviceValue = found.value;
       }
     }
-  }, [queryService]);
+
+    let initialNote = "";
+    if (queryType || queryTimeline || (queryService && queryService.includes(","))) {
+      initialNote = `[Project Scope: ${queryType ? `Type: ${queryType} | ` : ""}${queryTimeline ? `Timeline: ${queryTimeline} | ` : ""}${queryService ? `Services: ${queryService}` : ""}]\n\n`;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      service: serviceValue || prev.service,
+      message: prev.message ? prev.message : initialNote,
+    }));
+  }, [queryService, queryType, queryTimeline]);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};

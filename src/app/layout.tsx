@@ -66,9 +66,9 @@ export const metadata: Metadata = {
     siteName: "Syntrixmesh Solutions",
     images: [
       {
-        url: "/logo.png",
-        width: 512,
-        height: 512,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Syntrixmesh Solutions",
       },
     ],
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Syntrixmesh Solutions | Software · Web · IT Infrastructure",
     description: "End-to-End Technology & Growth Partner. Delivering cutting-edge software & IT worldwide.",
-    images: ["/logo.png"],
+    images: ["/og-image.png"],
     creator: "@syntrixmesh",
   },
   robots: {
@@ -85,9 +85,12 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/logo.svg",
-    shortcut: "/logo.svg",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

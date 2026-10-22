@@ -35,7 +35,9 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(true);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const pathname = usePathname();
 
   const drawerRef = useRef<HTMLDivElement | null>(null);
@@ -109,6 +111,7 @@ export default function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setServicesDropdownOpen(false);
+    setResourcesDropdownOpen(false);
   }, [pathname]);
 
   return (
@@ -124,12 +127,12 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 rounded-full p-0.5 bg-white shadow-cyan-glow transition-transform duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
+              <div className="relative w-11 h-11 rounded-full p-0.5 bg-white shadow-cyan-glow transition-transform duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
                 <Image
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt="Syntrixmesh Solutions Logo"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   className="w-full h-full object-contain"
                   priority
                 />
@@ -228,6 +231,84 @@ export default function Navbar() {
                 Portfolio
               </Link>
 
+              {/* Resources Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setResourcesDropdownOpen(true)}
+                onMouseLeave={() => setResourcesDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  aria-label="Toggle resources sub-menu"
+                  aria-haspopup="true"
+                  aria-expanded={resourcesDropdownOpen}
+                  aria-controls="resources-dropdown-panel"
+                  onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setResourcesDropdownOpen(true);
+                    }
+                    if (e.key === "Escape") {
+                      setResourcesDropdownOpen(false);
+                    }
+                  }}
+                  className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
+                    pathname === "/packages" || pathname === "/faq" || pathname.startsWith("/blog")
+                      ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
+                      : "text-mesh-text hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <span>Resources</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      resourcesDropdownOpen ? "rotate-180 text-cyan-400" : ""
+                    }`}
+                  />
+                </button>
+
+                {resourcesDropdownOpen && (
+                  <div
+                    id="resources-dropdown-panel"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 rounded-2xl bg-navy-950/95 backdrop-blur-xl border border-cyan-400/25 p-3 shadow-2xl z-[100]"
+                  >
+                    <Link
+                      href="/packages"
+                      onClick={() => setResourcesDropdownOpen(false)}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                    >
+                      <div>
+                        <div className="font-semibold text-white group-hover:text-cyan-400">Packages</div>
+                        <div className="text-[11px] text-mesh-muted">3 Engagement Models</div>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                    </Link>
+                    <Link
+                      href="/faq"
+                      onClick={() => setResourcesDropdownOpen(false)}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                    >
+                      <div>
+                        <div className="font-semibold text-white group-hover:text-cyan-400">FAQ</div>
+                        <div className="text-[11px] text-mesh-muted">18 Questions & Answers</div>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                    </Link>
+                    <Link
+                      href="/blog"
+                      onClick={() => setResourcesDropdownOpen(false)}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                    >
+                      <div>
+                        <div className="font-semibold text-white group-hover:text-cyan-400">Engineering Blog</div>
+                        <div className="text-[11px] text-mesh-muted">Technical Deep Dives</div>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               <Link
                 href="/contact"
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
@@ -298,12 +379,12 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3"
             >
-              <div className="relative w-9 h-9 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
+              <div className="relative w-10 h-10 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
                 <Image
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt="Syntrixmesh Solutions Logo"
-                  width={36}
-                  height={36}
+                  width={40}
+                  height={40}
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -422,6 +503,53 @@ export default function Navbar() {
                 Portfolio & Case Studies
               </Link>
 
+              {/* Collapsible Resources Group */}
+              <div className="border-b border-navy-800/80 py-2">
+                <div className="flex items-center justify-between py-2">
+                  <span className="text-xl font-heading font-semibold text-white">
+                    Resources
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setMobileResourcesOpen(!mobileResourcesOpen)}
+                    className="p-1.5 text-cyan-400 hover:text-white"
+                    aria-label="Toggle resources menu"
+                  >
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform duration-200 ${
+                        mobileResourcesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {mobileResourcesOpen && (
+                  <div className="pl-3 py-2 space-y-2">
+                    <Link
+                      href="/packages"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block p-2 rounded-xl bg-navy-900/50 border border-cyan-400/10 hover:border-cyan-400/40 text-sm font-medium text-white"
+                    >
+                      Service Packages & Models
+                    </Link>
+                    <Link
+                      href="/faq"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block p-2 rounded-xl bg-navy-900/50 border border-cyan-400/10 hover:border-cyan-400/40 text-sm font-medium text-white"
+                    >
+                      Frequently Asked Questions (FAQ)
+                    </Link>
+                    <Link
+                      href="/blog"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block p-2 rounded-xl bg-navy-900/50 border border-cyan-400/10 hover:border-cyan-400/40 text-sm font-medium text-white"
+                    >
+                      Engineering Blog & Guides
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
@@ -435,7 +563,7 @@ export default function Navbar() {
             <div className="pt-4 space-y-4">
               <div className="p-4 rounded-2xl glass-panel border border-cyan-400/20 bg-navy-900/70 space-y-3">
                 <div className="text-xs text-mesh-muted">
-                  Vill. Jhande, Ludhiana, Punjab, 142021
+                  Jhande, Ludhiana, Punjab, 142021
                 </div>
                 <a
                   href={`tel:${siteConfig.contact.phoneClean}`}

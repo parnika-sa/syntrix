@@ -43,12 +43,12 @@ export default function Preloader() {
         <div className="w-16 h-16 rounded-full border-2 border-cyan-400/30 border-t-cyan-400 animate-spin" />
 
         {/* Center Logo */}
-        <div className="absolute w-11 h-11 rounded-full p-1 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
+        <div className="absolute w-12 h-12 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="Syntrixmesh Solutions"
-            width={40}
-            height={40}
+            width={48}
+            height={48}
             className="w-full h-full object-contain"
             priority
           />

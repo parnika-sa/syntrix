@@ -51,7 +51,7 @@ export default function LazyMap() {
           <div className="w-10 h-10 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 mb-2">
             <MapPin className="w-5 h-5" />
           </div>
-          <span className="text-xs text-white font-medium">Vill. Jhande, Ludhiana, Punjab</span>
+          <span className="text-xs text-white font-medium">Jhande, Ludhiana, Punjab</span>
           <button
             type="button"
             onClick={() => setLoadMap(true)}

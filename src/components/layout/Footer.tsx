@@ -74,12 +74,12 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
+              <div className="w-11 h-11 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
                 <Image
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt="Syntrixmesh Solutions Logo"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -176,18 +176,23 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about#founder" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  Meet Founder Manmeet
-                </Link>
-              </li>
-              <li>
                 <Link href="/portfolio" className="hover:text-cyan-400 transition-colors block py-0.5">
                   Case Studies & Proof
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  Full Technology Stack
+                <Link href="/packages" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Engagement Packages
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Frequently Asked (FAQ)
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Engineering Blog
                 </Link>
               </li>
               <li>

@@ -174,7 +174,7 @@ export default function AboutPage() {
                 <div className="w-32 h-32 rounded-3xl p-1 bg-gradient-to-tr from-cyan-400 to-gold-400 shadow-2xl relative mb-4">
                   <div className="w-full h-full rounded-[22px] bg-navy-950 flex items-center justify-center overflow-hidden p-2">
                     <Image
-                      src="/logo.svg"
+                      src="/logo.png"
                       alt="Syntrixmesh Emblem"
                       width={96}
                       height={96}

@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { servicesData } from "@/data/services";
+import { blogPosts } from "@/data/blog";
 import { siteConfig } from "@/data/siteConfig";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -27,6 +28,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/portfolio`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/packages`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.85,
@@ -82,5 +101,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...servicePages];
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.isoDate),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...servicePages, ...blogPages];
 }
