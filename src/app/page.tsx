@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { 
   ArrowRight, 
@@ -17,7 +18,12 @@ import { Hero3DContainer } from "@/components/home/Hero3DContainer";
 import { ServicesBento } from "@/components/home/ServicesBento";
 import TechMarquee from "@/components/ui/TechMarquee";
 import Card3D from "@/components/ui/Card3D";
+import TypewriterHeadline from "@/components/ui/TypewriterHeadline";
 import { siteConfig } from "@/data/siteConfig";
+
+const DotGrid = dynamic(() => import("@/components/canvas/DotGrid"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: "Syntrixmesh Solutions | Websites, AI Agents & IT Infrastructure",
@@ -66,8 +72,35 @@ export default function HomePage() {
     <div className="relative overflow-hidden bg-[#070B14] text-white">
       
       {/* 1. HERO SECTION (Split layout: Instant Server-rendered LCP on left, 3D on right) */}
-      <section className="relative min-h-[80vh] lg:min-h-[88vh] flex items-center pt-6 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-hero-mesh noise-overlay">
+      <section className="relative min-h-[80vh] lg:min-h-[88vh] flex items-center pt-6 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         
+        {/* Interactive WebGL2 DotGrid Background with spring physics & shockwaves */}
+        <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+          <DotGrid
+            baseColor="#080e18"
+            activeColor="#2fb8ff"
+            shape="square"
+            dotSize={3}
+            gap={12}
+            proximity={120}
+            strength={1}
+            bounce={0.6}
+            tension={0.1}
+            returnDuration={0.8}
+            shockRadius={320}
+            shockStrength={1.5}
+            swell={1.2}
+            stretch={0.5}
+            glow={0.08}
+            fade={0}
+            intro
+            opacity={0.85}
+            mouseInteraction
+            clickShock
+            dpr={1.0}
+          />
+        </div>
+
         {/* Ambient Top Glow Orbs - seated safely in background with pointer-events-none */}
         <div 
           className="absolute top-1/4 left-1/4 w-[500px] h-[350px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" 
@@ -90,12 +123,19 @@ export default function HomePage() {
                 <span>Ludhiana HQ · Global Delivery</span>
               </div>
 
-              {/* Main Headline */}
-              <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.12]">
-                Websites, AI Agents &amp; IT Infrastructure,{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-gold-400 underline decoration-cyan-400/30 decoration-wavy decoration-2">
-                  Engineered to Grow Your Business.
-                </span>
+              {/* Main Headline with Native Typewriter Tagline */}
+              <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.14]">
+                <span className="block mb-2">Websites, AI Agents &amp; IT Infrastructure,</span>
+                <TypewriterHeadline
+                  phrases={[
+                    "Engineered to Scale Your Business.",
+                    "Autonomous 24/7 AI Chat Systems.",
+                    "High-Performance Web Platforms.",
+                    "Enterprise Cloud & IT Infrastructure.",
+                    "Direct Founder Engineering. Zero Bloat.",
+                  ]}
+                  className="text-2xl sm:text-4xl lg:text-5xl"
+                />
               </h1>
 
               {/* Honest Subheading */}
@@ -224,6 +264,33 @@ export default function HomePage() {
       <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative border-t border-white/5">
         <div className="rounded-3xl p-8 sm:p-12 glass-panel border border-cyan-400/30 bg-gradient-to-br from-navy-900 via-navy-850 to-[#070B14] relative overflow-hidden shadow-2xl">
           
+          {/* Interactive WebGL2 DotGrid inside Final Strategy CTA Banner */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-75">
+            <DotGrid
+              baseColor="#070c16"
+              activeColor="#2fb8ff"
+              shape="square"
+              dotSize={3}
+              gap={12}
+              proximity={110}
+              strength={1}
+              bounce={0.6}
+              tension={0.1}
+              returnDuration={0.8}
+              shockRadius={320}
+              shockStrength={1.5}
+              swell={1.2}
+              stretch={0.5}
+              glow={0.06}
+              fade={0}
+              intro
+              opacity={0.8}
+              mouseInteraction
+              clickShock
+              dpr={1.0}
+            />
+          </div>
+
           <div 
             className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/15 rounded-full blur-[100px] pointer-events-none" 
             aria-hidden="true" 

@@ -19,6 +19,78 @@ const serviceNodesData = [
   { name: "Web3 Protocols & Smart Contracts", href: "/services/web3-dapps", slug: "web3-dapps" },
 ];
 
+function createMedallionTexture(): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return new THREE.CanvasTexture(canvas);
+
+  // Background circle
+  ctx.fillStyle = "#070B14";
+  ctx.fillRect(0, 0, size, size);
+
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size * 0.44;
+
+  // Outer gold rim
+  const grad = ctx.createLinearGradient(0, 0, size, size);
+  grad.addColorStop(0, "#E8CF88");
+  grad.addColorStop(0.5, "#C9A24B");
+  grad.addColorStop(1, "#94732A");
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 14;
+  ctx.stroke();
+
+  // Thin inner cyan border
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(47, 184, 255, 0.45)";
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Subtle circular radial glow
+  const radial = ctx.createRadialGradient(cx, cy, 10, cx, cy, r - 20);
+  radial.addColorStop(0, "rgba(47, 184, 255, 0.18)");
+  radial.addColorStop(0.7, "rgba(7, 11, 20, 0.85)");
+  radial.addColorStop(1, "rgba(7, 11, 20, 1)");
+  ctx.fillStyle = radial;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 14, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Gold text with soft shadow
+  ctx.shadowColor = "rgba(47, 184, 255, 0.6)";
+  ctx.shadowBlur = 18;
+  const textGrad = ctx.createLinearGradient(cx - 80, cy - 80, cx + 80, cy + 80);
+  textGrad.addColorStop(0, "#FFFFFF");
+  textGrad.addColorStop(0.3, "#F4DB96");
+  textGrad.addColorStop(0.7, "#C9A24B");
+  textGrad.addColorStop(1, "#8A6926");
+  ctx.fillStyle = textGrad;
+
+  // "SM" Monogram
+  ctx.font = "bold 140px 'Cinzel', 'Playfair Display', Georgia, serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("SM", cx, cy - 10);
+
+  // Subtitle "SYNTRIX" below
+  ctx.shadowBlur = 0;
+  ctx.font = "bold 22px 'Space Grotesk', system-ui, sans-serif";
+  ctx.fillStyle = "#E8CF88";
+  ctx.fillText("SYNTRIX", cx, cy + 86);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
 export default function HeroMedallion3D() {
   const mountRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -51,7 +123,7 @@ export default function HeroMedallion3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.2;
 
     renderer.domElement.setAttribute("aria-hidden", "true");
     renderer.domElement.style.outline = "none";
@@ -60,61 +132,123 @@ export default function HeroMedallion3D() {
     container.appendChild(renderer.domElement);
 
     // 4. Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.0);
+    const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.2);
     keyLight.position.set(5, 5, 6);
     scene.add(keyLight);
 
-    const cyanLight = new THREE.PointLight(0x2fb8ff, 3.5, 12);
+    const cyanLight = new THREE.PointLight(0x2fb8ff, 4.0, 14);
     cyanLight.position.set(-4, -2, 4);
     scene.add(cyanLight);
 
-    const goldLight = new THREE.PointLight(0xc9a24b, 2.5, 10);
+    const goldLight = new THREE.PointLight(0xc9a24b, 3.0, 12);
     goldLight.position.set(4, -3, -2);
     scene.add(goldLight);
 
-    // 5. Central Glowing Core (Faceted Emissive Orb + Warm Gold Inner Light)
-    const coreGroup = new THREE.Group();
-    scene.add(coreGroup);
+    // 5. HYBRID OPTION 4: 3D Floating Gold "SM" Medallion + Gyroscopic Cyber Rings
+    const centralGroup = new THREE.Group();
+    scene.add(centralGroup);
 
-    // Outer faceted cyan orb (flat shaded icosahedron)
-    const coreGeo = new THREE.IcosahedronGeometry(0.9, 0);
-    const coreMat = new THREE.MeshStandardMaterial({
+    // A. 3D Medallion Disc
+    const medallionTexture = createMedallionTexture();
+    const discGeo = new THREE.CylinderGeometry(1.05, 1.05, 0.14, 48);
+
+    const goldRimMat = new THREE.MeshStandardMaterial({
+      color: 0xe8cf88,
+      metalness: 0.92,
+      roughness: 0.16,
+      emissive: 0x94732a,
+      emissiveIntensity: 0.2,
+    });
+
+    const faceMat = new THREE.MeshStandardMaterial({
+      map: medallionTexture,
+      metalness: 0.45,
+      roughness: 0.22,
+    });
+
+    const medallionMesh = new THREE.Mesh(discGeo, [goldRimMat, faceMat, faceMat]);
+    medallionMesh.rotation.x = Math.PI / 2; // Face the camera
+    centralGroup.add(medallionMesh);
+
+    // Inner glowing point light inside medallion
+    const innerLight = new THREE.PointLight(0xf4db96, 2.0, 6);
+    centralGroup.add(innerLight);
+
+    // B. Gyroscopic Cyber Ring 1 (Cyan)
+    const gyroRing1Group = new THREE.Group();
+    centralGroup.add(gyroRing1Group);
+
+    const ring1Geo = new THREE.TorusGeometry(1.68, 0.024, 16, 72);
+    const ring1Mat = new THREE.MeshStandardMaterial({
       color: 0x2fb8ff,
       emissive: 0x1e6bff,
-      emissiveIntensity: 1.3,
-      metalness: 0.3,
-      roughness: 0.15,
-      flatShading: true,
-      transparent: true,
-      opacity: 0.9,
+      emissiveIntensity: 1.4,
+      metalness: 0.8,
+      roughness: 0.2,
     });
-    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-    coreGroup.add(coreMesh);
+    const ring1Mesh = new THREE.Mesh(ring1Geo, ring1Mat);
+    gyroRing1Group.add(ring1Mesh);
 
-    // Inner warm gold geometric light
-    const innerGeo = new THREE.OctahedronGeometry(0.5, 0);
-    const innerMat = new THREE.MeshBasicMaterial({
+    // Cyan beads along Ring 1
+    const ring1BeadCount = 4;
+    const ring1Beads: THREE.Mesh[] = [];
+    for (let b = 0; b < ring1BeadCount; b++) {
+      const beadGeo = new THREE.SphereGeometry(0.065, 12, 12);
+      const beadMat = new THREE.MeshBasicMaterial({ color: 0x2fb8ff });
+      const bead = new THREE.Mesh(beadGeo, beadMat);
+      ring1Mesh.add(bead);
+      ring1Beads.push(bead);
+    }
+
+    // Set initial tilt for Ring 1
+    gyroRing1Group.rotation.x = 0.55;
+    gyroRing1Group.rotation.y = 0.35;
+
+    // C. Gyroscopic Cyber Ring 2 (Gold)
+    const gyroRing2Group = new THREE.Group();
+    centralGroup.add(gyroRing2Group);
+
+    const ring2Geo = new THREE.TorusGeometry(2.1, 0.024, 16, 72);
+    const ring2Mat = new THREE.MeshStandardMaterial({
       color: 0xf4db96,
-      wireframe: true,
+      emissive: 0x94732a,
+      emissiveIntensity: 1.1,
+      metalness: 0.85,
+      roughness: 0.2,
     });
-    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-    coreGroup.add(innerMesh);
+    const ring2Mesh = new THREE.Mesh(ring2Geo, ring2Mat);
+    gyroRing2Group.add(ring2Mesh);
 
-    // 6. Glowing Wireframe Mesh Sphere (Icosahedron Grid)
-    const icoGeo = new THREE.IcosahedronGeometry(2.7, 1);
+    // Gold beads along Ring 2
+    const ring2BeadCount = 4;
+    const ring2Beads: THREE.Mesh[] = [];
+    for (let b = 0; b < ring2BeadCount; b++) {
+      const beadGeo = new THREE.SphereGeometry(0.065, 12, 12);
+      const beadMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const bead = new THREE.Mesh(beadGeo, beadMat);
+      ring2Mesh.add(bead);
+      ring2Beads.push(bead);
+    }
+
+    // Set initial counter-tilt for Ring 2
+    gyroRing2Group.rotation.x = -0.65;
+    gyroRing2Group.rotation.y = -0.45;
+
+    // 6. Glowing Outer Geodesic Sphere Cage
+    const icoGeo = new THREE.IcosahedronGeometry(2.85, 1);
     const wireGeo = new THREE.WireframeGeometry(icoGeo);
     const wireMat = new THREE.LineBasicMaterial({
       color: 0x2fb8ff,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.28,
     });
     const wireMesh = new THREE.LineSegments(wireGeo, wireMat);
     scene.add(wireMesh);
 
-    // 7. Data Pulses Travelling Along Grid Edges
+    // 7. Data Pulses Travelling Along Grid Coordinates
     const pulseCount = 4;
     const pulseMeshes: THREE.Mesh[] = [];
     const pulsePositions = [
@@ -135,7 +269,7 @@ export default function HeroMedallion3D() {
       pulseMeshes.push(pulseMesh);
     }
 
-    // 8. Six Orbiting Service Nodes (Reduced orbit radius to 3.45 to ensure safe zero-clipping margins)
+    // 8. Six Orbiting Service Nodes
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
 
@@ -167,7 +301,7 @@ export default function HeroMedallion3D() {
         Math.sin(angle) * orbitRadius * 0.55
       );
 
-      // Subtle cyan halo ring around each node
+      // Cyan halo ring around each node
       const haloGeo = new THREE.RingGeometry(0.24, 0.3, 16);
       const haloMat = new THREE.MeshBasicMaterial({
         color: 0x2fb8ff,
@@ -182,12 +316,12 @@ export default function HeroMedallion3D() {
       nodeSpheres.push(nodeSphere);
     });
 
-    // 9. Mouse interaction with clamped parallax (+/- 10 degrees)
+    // 9. Mouse interaction with clamped parallax
     let mouseX = 0;
     let mouseY = 0;
     let targetRotX = 0;
     let targetRotY = 0;
-    const maxTilt = 0.174; // ~10 degrees in radians
+    const maxTilt = 0.174; // ~10 degrees
 
     const raycaster = new THREE.Raycaster();
     const mouseCoord = new THREE.Vector2(-10, -10);
@@ -202,11 +336,10 @@ export default function HeroMedallion3D() {
       mouseCoord.x = x;
       mouseCoord.y = y;
 
-      // Gentle mouse parallax limited to +/- 10 degrees
       targetRotY = THREE.MathUtils.clamp(mouseX * maxTilt, -maxTilt, maxTilt);
       targetRotX = THREE.MathUtils.clamp(-mouseY * maxTilt, -maxTilt, maxTilt);
 
-      // Check intersections
+      // Check node intersections
       raycaster.setFromCamera(mouseCoord, camera);
       const intersects = raycaster.intersectObjects(nodeSpheres, false);
 
@@ -219,11 +352,10 @@ export default function HeroMedallion3D() {
           y: e.clientY - rect.top,
         });
 
-        // Brighten hovered node
         nodeSpheres.forEach((s) => {
           const mat = s.material as THREE.MeshStandardMaterial;
           if (s === hit) {
-            mat.emissiveIntensity = 1.8;
+            mat.emissiveIntensity = 1.9;
             mat.emissive.setHex(0x2fb8ff);
           } else {
             mat.emissiveIntensity = 0.6;
@@ -240,9 +372,11 @@ export default function HeroMedallion3D() {
       }
     };
 
-    // 9. Pointer Drag Interaction for Touch & Mouse
+    // 10. Pointer Drag Interaction for Touch & Mouse
     let isDragging = false;
     let prevPointer = { x: 0, y: 0 };
+    let dragRotY = 0;
+    let dragRotX = 0;
 
     const onPointerDown = (e: PointerEvent) => {
       isDragging = true;
@@ -258,8 +392,8 @@ export default function HeroMedallion3D() {
       if (isDragging) {
         const deltaX = e.clientX - prevPointer.x;
         const deltaY = e.clientY - prevPointer.y;
-        wireMesh.rotation.y += deltaX * 0.006;
-        wireMesh.rotation.x += deltaY * 0.006;
+        dragRotY += deltaX * 0.007;
+        dragRotX += deltaY * 0.007;
         prevPointer = { x: e.clientX, y: e.clientY };
       }
     };
@@ -286,7 +420,7 @@ export default function HeroMedallion3D() {
     window.addEventListener("pointercancel", onPointerUp);
     container.addEventListener("click", onClick);
 
-    // 10. Resize Handling
+    // 11. Resize Handling
     const handleResize = () => {
       if (!container) return;
       const newWidth = container.clientWidth;
@@ -302,7 +436,7 @@ export default function HeroMedallion3D() {
 
     window.addEventListener("resize", handleResize);
 
-    // 11. Pause rendering when out of view or tab hidden
+    // 12. Visibility Handling
     let isRendering = true;
     let animFrameId: number;
 
@@ -325,7 +459,7 @@ export default function HeroMedallion3D() {
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
 
-    // 12. Animation Loop
+    // 13. Animation Loop
     const clock = new THREE.Clock();
 
     const animate = () => {
@@ -336,24 +470,37 @@ export default function HeroMedallion3D() {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Breathing pulse on the core
-      const pulse = 1 + Math.sin(elapsedTime * 2.2) * 0.08;
-      coreGroup.scale.set(pulse, pulse, pulse);
+      // Gentle floating breathing pulse on central group
+      const pulse = 1 + Math.sin(elapsedTime * 2.0) * 0.05;
+      centralGroup.scale.set(pulse, pulse, pulse);
 
-      // Core rotation
-      coreMesh.rotation.y += 0.005;
-      coreMesh.rotation.x += 0.003;
-      innerMesh.rotation.y -= 0.008;
-      innerMesh.rotation.z += 0.004;
+      // Floating wobble and slow rotation on 3D Medallion
+      medallionMesh.rotation.z = elapsedTime * 0.25; // Rotates medallion face
+      medallionMesh.rotation.x = Math.PI / 2 + Math.sin(elapsedTime * 1.5) * 0.12;
 
-      // Outer wireframe mesh rotates gently
-      wireMesh.rotation.y -= 0.0025;
-      wireMesh.rotation.x = targetRotX;
-      wireMesh.rotation.y += targetRotY * 0.02;
+      // Gyroscopic Ring 1 rotation (Cyan, continuous rotation on its plane)
+      ring1Mesh.rotation.z += 0.012;
+      ring1Beads.forEach((bead, idx) => {
+        const theta = elapsedTime * 1.2 + (idx * Math.PI) / 2;
+        bead.position.set(Math.cos(theta) * 1.68, Math.sin(theta) * 1.68, 0);
+      });
+
+      // Gyroscopic Ring 2 rotation (Gold, counter-rotation on its plane)
+      ring2Mesh.rotation.z -= 0.009;
+      ring2Beads.forEach((bead, idx) => {
+        const theta = -elapsedTime * 0.9 + (idx * Math.PI) / 2;
+        bead.position.set(Math.cos(theta) * 2.1, Math.sin(theta) * 2.1, 0);
+      });
+
+      // Apply drag rotation + subtle mouse parallax
+      wireMesh.rotation.y = dragRotY - elapsedTime * 0.0025 + targetRotY * 0.02;
+      wireMesh.rotation.x = dragRotX + targetRotX;
+      centralGroup.rotation.y = dragRotY * 0.5;
+      centralGroup.rotation.x = dragRotX * 0.5;
 
       // Orbiting nodes position update
       nodeSpheres.forEach((sphere) => {
-        const currentAngle = sphere.userData.baseAngle + elapsedTime * 0.22;
+        const currentAngle = sphere.userData.baseAngle + elapsedTime * 0.22 + dragRotY;
         sphere.position.x = Math.cos(currentAngle) * orbitRadius;
         sphere.position.z = Math.sin(currentAngle) * orbitRadius * 0.55;
         sphere.position.y =
@@ -372,7 +519,7 @@ export default function HeroMedallion3D() {
 
     animFrameId = requestAnimationFrame(animate);
 
-    // 13. Cleanup
+    // 14. Cleanup
     return () => {
       if (animFrameId) cancelAnimationFrame(animFrameId);
       observer.disconnect();
@@ -384,14 +531,18 @@ export default function HeroMedallion3D() {
       window.removeEventListener("pointercancel", onPointerUp);
       container.removeEventListener("click", onClick);
 
-      scene.remove(coreGroup);
+      scene.remove(centralGroup);
       scene.remove(wireMesh);
       scene.remove(nodeGroup);
 
-      coreGeo.dispose();
-      coreMat.dispose();
-      innerGeo.dispose();
-      innerMat.dispose();
+      discGeo.dispose();
+      goldRimMat.dispose();
+      faceMat.dispose();
+      medallionTexture.dispose();
+      ring1Geo.dispose();
+      ring1Mat.dispose();
+      ring2Geo.dispose();
+      ring2Mat.dispose();
       icoGeo.dispose();
       wireGeo.dispose();
       wireMat.dispose();
