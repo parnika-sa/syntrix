@@ -26,6 +26,7 @@ const mainPages = [
   { title: "About Syntrixmesh", href: "/about", desc: "Our engineering philosophy, founder profile, and Ludhiana headquarters." },
   { title: "Portfolio & Case Studies", href: "/portfolio", desc: "Headless e-commerce, AI agents, workstation setups, and custom web software." },
   { title: "All Services", href: "/services", desc: "Comprehensive breakdown of our six primary technology practice areas." },
+  { title: "Get a Free Quote", href: "/get-quote", desc: "Interactive 3-step project scope configurator and direct proposal request." },
   { title: "Contact & Consultation", href: "/contact", desc: "Schedule a technical discovery session or reach our engineering desk." },
 ];
 

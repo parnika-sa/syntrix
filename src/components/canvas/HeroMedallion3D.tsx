@@ -28,18 +28,17 @@ export default function HeroMedallion3D() {
     const container = mountRef.current;
     if (!container) return;
 
-    // Check width and bounds
-    const width = container.clientWidth || 480;
-    const height = container.clientHeight || 480;
+    const width = container.clientWidth || 520;
+    const height = container.clientHeight || 520;
 
     // 1. Scene setup
     const scene = new THREE.Scene();
 
-    // 2. Camera setup
+    // 2. Camera setup - Positioned at z=12 to give ample safe margins against clipping
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 11);
+    camera.position.set(0, 0, 12);
 
-    // 3. Renderer with strict performance caps
+    // 3. Renderer with capped DPR and tone mapping
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -48,9 +47,8 @@ export default function HeroMedallion3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
 
-    // Prevent any canvas focus steal
     renderer.domElement.setAttribute("aria-hidden", "true");
     renderer.domElement.style.outline = "none";
     renderer.domElement.style.width = "100%";
@@ -61,93 +59,93 @@ export default function HeroMedallion3D() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xfff5e6, 2.5); // Warm key light
-    dirLight1.position.set(5, 6, 7);
-    scene.add(dirLight1);
+    const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.0);
+    keyLight.position.set(5, 5, 6);
+    scene.add(keyLight);
 
-    const cyanPointLight = new THREE.PointLight(0x2fb8ff, 4.0, 15);
-    cyanPointLight.position.set(-5, -3, 3);
-    scene.add(cyanPointLight);
+    const cyanLight = new THREE.PointLight(0x2fb8ff, 3.5, 12);
+    cyanLight.position.set(-4, -2, 4);
+    scene.add(cyanLight);
 
-    const goldPointLight = new THREE.PointLight(0xc9a24b, 3.0, 15);
-    goldPointLight.position.set(4, -4, -2);
-    scene.add(goldPointLight);
+    const goldLight = new THREE.PointLight(0xc9a24b, 2.5, 10);
+    goldLight.position.set(4, -3, -2);
+    scene.add(goldLight);
 
-    // 5. Medallion / Coin Mesh
-    const textureLoader = new THREE.TextureLoader();
-    const logoTexture = textureLoader.load("/logo.png", (tex) => {
-      tex.generateMipmaps = true;
-      tex.minFilter = THREE.LinearMipmapLinearFilter;
-      tex.magFilter = THREE.LinearFilter;
-      tex.colorSpace = THREE.SRGBColorSpace;
-    });
+    // 5. Central Glowing Core (Faceted Emissive Orb + Warm Gold Inner Light)
+    const coreGroup = new THREE.Group();
+    scene.add(coreGroup);
 
-    const coinRadius = 2.1;
-    const coinHeight = 0.32;
-    const coinGeometry = new THREE.CylinderGeometry(coinRadius, coinRadius, coinHeight, 64);
-    // Rotate cylinder so top face faces Z+
-    coinGeometry.rotateX(Math.PI / 2);
-
-    const goldRimMaterial = new THREE.MeshStandardMaterial({
-      color: 0xc9a24b,
-      metalness: 0.9,
-      roughness: 0.22,
-    });
-
-    const frontFaceMaterial = new THREE.MeshStandardMaterial({
-      map: logoTexture,
-      metalness: 0.2,
-      roughness: 0.4,
+    // Outer faceted cyan orb (flat shaded icosahedron)
+    const coreGeo = new THREE.IcosahedronGeometry(0.9, 0);
+    const coreMat = new THREE.MeshStandardMaterial({
+      color: 0x2fb8ff,
+      emissive: 0x1e6bff,
+      emissiveIntensity: 1.3,
+      metalness: 0.3,
+      roughness: 0.15,
+      flatShading: true,
       transparent: true,
+      opacity: 0.9,
     });
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    coreGroup.add(coreMesh);
 
-    const backFaceMaterial = new THREE.MeshStandardMaterial({
-      color: 0x070b14,
-      metalness: 0.85,
-      roughness: 0.25,
+    // Inner warm gold geometric light
+    const innerGeo = new THREE.OctahedronGeometry(0.5, 0);
+    const innerMat = new THREE.MeshBasicMaterial({
+      color: 0xf4db96,
+      wireframe: true,
     });
+    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+    coreGroup.add(innerMesh);
 
-    // Cylinder materials: [0: side, 1: top (+Z after rotation), 2: bottom (-Z after rotation)]
-    const medallionMesh = new THREE.Mesh(coinGeometry, [
-      goldRimMaterial,
-      frontFaceMaterial,
-      backFaceMaterial,
-    ]);
-
-    // Outer beveled ring accent
-    const outerTorusGeo = new THREE.TorusGeometry(coinRadius + 0.05, 0.08, 16, 64);
-    const outerTorusMesh = new THREE.Mesh(outerTorusGeo, goldRimMaterial);
-    medallionMesh.add(outerTorusMesh);
-
-    scene.add(medallionMesh);
-
-    // 6. Glowing Wireframe Mesh Core (Icosahedron network)
-    const icoGeo = new THREE.IcosahedronGeometry(3.5, 1);
+    // 6. Glowing Wireframe Mesh Sphere (Icosahedron Grid)
+    const icoGeo = new THREE.IcosahedronGeometry(2.7, 1);
     const wireGeo = new THREE.WireframeGeometry(icoGeo);
     const wireMat = new THREE.LineBasicMaterial({
       color: 0x2fb8ff,
       transparent: true,
-      opacity: 0.28,
-      linewidth: 1,
+      opacity: 0.35,
     });
     const wireMesh = new THREE.LineSegments(wireGeo, wireMat);
     scene.add(wireMesh);
 
-    // 7. Six Orbiting Service Nodes
+    // 7. Data Pulses Travelling Along Grid Edges
+    const pulseCount = 4;
+    const pulseMeshes: THREE.Mesh[] = [];
+    const pulsePositions = [
+      new THREE.Vector3(2.4, 0.8, 0.8),
+      new THREE.Vector3(-1.8, 1.9, 0.5),
+      new THREE.Vector3(0.5, -2.5, 0.8),
+      new THREE.Vector3(-2.2, -1.2, 0.9),
+    ];
+
+    for (let p = 0; p < pulseCount; p++) {
+      const pulseGeo = new THREE.SphereGeometry(0.07, 8, 8);
+      const pulseMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+      });
+      const pulseMesh = new THREE.Mesh(pulseGeo, pulseMat);
+      pulseMesh.position.copy(pulsePositions[p]);
+      wireMesh.add(pulseMesh);
+      pulseMeshes.push(pulseMesh);
+    }
+
+    // 8. Six Orbiting Service Nodes (Reduced orbit radius to 3.45 to ensure safe zero-clipping margins)
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
 
     const nodeSpheres: THREE.Mesh[] = [];
-    const orbitRadius = 4.3;
+    const orbitRadius = 3.45;
 
     serviceNodesData.forEach((svc, i) => {
       const angle = (i / serviceNodesData.length) * Math.PI * 2;
-      const sphereGeo = new THREE.SphereGeometry(0.2, 16, 16);
+      const sphereGeo = new THREE.SphereGeometry(0.18, 16, 16);
       const sphereMat = new THREE.MeshStandardMaterial({
         color: 0x2fb8ff,
         emissive: 0x1e6bff,
-        emissiveIntensity: 0.9,
-        metalness: 0.5,
+        emissiveIntensity: 0.8,
+        metalness: 0.4,
         roughness: 0.2,
       });
 
@@ -156,22 +154,22 @@ export default function HeroMedallion3D() {
         name: svc.name,
         href: svc.href,
         baseAngle: angle,
-        baseY: Math.sin(angle * 2) * 0.8,
+        baseY: Math.sin(angle * 2) * 0.7,
       };
 
       nodeSphere.position.set(
         Math.cos(angle) * orbitRadius,
         nodeSphere.userData.baseY,
-        Math.sin(angle) * orbitRadius * 0.5
+        Math.sin(angle) * orbitRadius * 0.55
       );
 
       // Subtle cyan halo ring around each node
-      const haloGeo = new THREE.RingGeometry(0.26, 0.32, 16);
+      const haloGeo = new THREE.RingGeometry(0.24, 0.3, 16);
       const haloMat = new THREE.MeshBasicMaterial({
         color: 0x2fb8ff,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.55,
       });
       const halo = new THREE.Mesh(haloGeo, haloMat);
       nodeSphere.add(halo);
@@ -180,11 +178,12 @@ export default function HeroMedallion3D() {
       nodeSpheres.push(nodeSphere);
     });
 
-    // 8. Mouse interaction (Parallax tilt & Raycasting)
+    // 9. Mouse interaction with clamped parallax (+/- 10 degrees)
     let mouseX = 0;
     let mouseY = 0;
     let targetRotX = 0;
     let targetRotY = 0;
+    const maxTilt = 0.174; // ~10 degrees in radians
 
     const raycaster = new THREE.Raycaster();
     const mouseCoord = new THREE.Vector2(-10, -10);
@@ -199,10 +198,11 @@ export default function HeroMedallion3D() {
       mouseCoord.x = x;
       mouseCoord.y = y;
 
-      targetRotY = mouseX * 0.45;
-      targetRotX = -mouseY * 0.35;
+      // Gentle mouse parallax limited to +/- 10 degrees
+      targetRotY = THREE.MathUtils.clamp(mouseX * maxTilt, -maxTilt, maxTilt);
+      targetRotX = THREE.MathUtils.clamp(-mouseY * maxTilt, -maxTilt, maxTilt);
 
-      // Check intersections for tooltips
+      // Check intersections
       raycaster.setFromCamera(mouseCoord, camera);
       const intersects = raycaster.intersectObjects(nodeSpheres, false);
 
@@ -214,9 +214,25 @@ export default function HeroMedallion3D() {
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
         });
+
+        // Brighten hovered node
+        nodeSpheres.forEach((s) => {
+          const mat = s.material as THREE.MeshStandardMaterial;
+          if (s === hit) {
+            mat.emissiveIntensity = 1.8;
+            mat.emissive.setHex(0x2fb8ff);
+          } else {
+            mat.emissiveIntensity = 0.6;
+          }
+        });
       } else {
         container.style.cursor = "default";
         setHoveredNode(null);
+        nodeSpheres.forEach((s) => {
+          const mat = s.material as THREE.MeshStandardMaterial;
+          mat.emissiveIntensity = 0.8;
+          mat.emissive.setHex(0x1e6bff);
+        });
       }
     };
 
@@ -239,7 +255,7 @@ export default function HeroMedallion3D() {
     container.addEventListener("mousemove", onPointerMove);
     container.addEventListener("click", onClick);
 
-    // 9. Resize Handling
+    // 10. Resize Handling
     const handleResize = () => {
       if (!container) return;
       const newWidth = container.clientWidth;
@@ -253,7 +269,7 @@ export default function HeroMedallion3D() {
 
     window.addEventListener("resize", handleResize);
 
-    // 10. Pause rendering when out of view or tab hidden
+    // 11. Pause rendering when out of view or tab hidden
     let isRendering = true;
     let animFrameId: number;
 
@@ -276,7 +292,7 @@ export default function HeroMedallion3D() {
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
 
-    // 11. Animation Loop
+    // 12. Animation Loop
     const clock = new THREE.Clock();
 
     const animate = () => {
@@ -287,23 +303,34 @@ export default function HeroMedallion3D() {
 
       const elapsedTime = clock.getElapsedTime();
 
-      // Medallion floating & continuous rotation + parallax mouse tilt
-      medallionMesh.position.y = Math.sin(elapsedTime * 1.4) * 0.16;
-      medallionMesh.rotation.y += 0.006;
-      medallionMesh.rotation.y += (targetRotY - (medallionMesh.rotation.y % (Math.PI * 2))) * 0.02;
-      medallionMesh.rotation.x += (targetRotX - medallionMesh.rotation.x) * 0.05;
+      // Breathing pulse on the core
+      const pulse = 1 + Math.sin(elapsedTime * 2.2) * 0.08;
+      coreGroup.scale.set(pulse, pulse, pulse);
 
-      // Outer wireframe mesh rotates oppositely
-      wireMesh.rotation.y -= 0.003;
-      wireMesh.rotation.x += 0.0015;
+      // Core rotation
+      coreMesh.rotation.y += 0.005;
+      coreMesh.rotation.x += 0.003;
+      innerMesh.rotation.y -= 0.008;
+      innerMesh.rotation.z += 0.004;
+
+      // Outer wireframe mesh rotates gently
+      wireMesh.rotation.y -= 0.0025;
+      wireMesh.rotation.x = targetRotX;
+      wireMesh.rotation.y += targetRotY * 0.02;
 
       // Orbiting nodes position update
       nodeSpheres.forEach((sphere) => {
-        const currentAngle = sphere.userData.baseAngle + elapsedTime * 0.25;
+        const currentAngle = sphere.userData.baseAngle + elapsedTime * 0.22;
         sphere.position.x = Math.cos(currentAngle) * orbitRadius;
         sphere.position.z = Math.sin(currentAngle) * orbitRadius * 0.55;
         sphere.position.y =
-          sphere.userData.baseY + Math.sin(elapsedTime * 2 + sphere.userData.baseAngle) * 0.2;
+          sphere.userData.baseY + Math.sin(elapsedTime * 2 + sphere.userData.baseAngle) * 0.15;
+      });
+
+      // Data pulses travel along wireframe coordinates
+      pulseMeshes.forEach((pm, idx) => {
+        const t = (elapsedTime * 0.8 + idx * 0.25) % 1;
+        pm.scale.setScalar(0.7 + Math.sin(t * Math.PI) * 0.6);
       });
 
       renderer.render(scene, camera);
@@ -312,7 +339,7 @@ export default function HeroMedallion3D() {
 
     animFrameId = requestAnimationFrame(animate);
 
-    // 12. Cleanup
+    // 13. Cleanup
     return () => {
       if (animFrameId) cancelAnimationFrame(animFrameId);
       observer.disconnect();
@@ -321,15 +348,14 @@ export default function HeroMedallion3D() {
       container.removeEventListener("mousemove", onPointerMove);
       container.removeEventListener("click", onClick);
 
-      scene.remove(medallionMesh);
+      scene.remove(coreGroup);
       scene.remove(wireMesh);
       scene.remove(nodeGroup);
 
-      coinGeometry.dispose();
-      goldRimMaterial.dispose();
-      frontFaceMaterial.dispose();
-      backFaceMaterial.dispose();
-      logoTexture.dispose();
+      coreGeo.dispose();
+      coreMat.dispose();
+      innerGeo.dispose();
+      innerMat.dispose();
       icoGeo.dispose();
       wireGeo.dispose();
       wireMat.dispose();
@@ -343,6 +369,15 @@ export default function HeroMedallion3D() {
         }
       });
 
+      pulseMeshes.forEach((pm) => {
+        pm.geometry.dispose();
+        if (Array.isArray(pm.material)) {
+          pm.material.forEach((m) => m.dispose());
+        } else {
+          pm.material.dispose();
+        }
+      });
+
       renderer.dispose();
       if (renderer.domElement.parentNode === container) {
         container.removeChild(renderer.domElement);
@@ -351,15 +386,13 @@ export default function HeroMedallion3D() {
   }, [router]);
 
   return (
-    <div className="relative w-full h-full select-none">
-      {/* 3D WebGL Canvas Mount */}
+    <div className="relative w-full h-full select-none overflow-visible">
       <div 
         ref={mountRef} 
-        className="w-full h-full min-h-[420px] max-h-[520px]"
+        className="w-full h-full min-h-[420px] max-h-[520px] overflow-visible"
         aria-hidden="true" 
       />
 
-      {/* Interactive Tooltip on Node Hover */}
       {hoveredNode && (
         <div
           className="absolute z-30 pointer-events-none transform -translate-x-1/2 -translate-y-full px-3 py-1.5 rounded-lg bg-navy-950/95 border border-cyan-400 text-white text-xs font-semibold shadow-cyan-glow whitespace-nowrap transition-opacity animate-fadeIn"

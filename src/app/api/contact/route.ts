@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
 
-// Server-side Zod validation schema
+// Server-side Zod validation schema (supports /contact and /get-quote submissions)
 const contactSchema = z.object({
   fullName: z
     .string()
@@ -14,16 +14,28 @@ const contactSchema = z.object({
   phone: z
     .string()
     .min(7, "Please enter a valid phone or WhatsApp number")
-    .max(20, "Phone number is too long"),
+    .max(25, "Phone number is too long"),
   service: z
     .string()
-    .min(1, "Please select a service"),
+    .optional(),
+  services: z
+    .array(z.string())
+    .optional(),
+  engagementType: z
+    .string()
+    .optional(),
+  timeline: z
+    .string()
+    .optional(),
   budget: z
     .string()
-    .min(1, "Please select a budget range"),
+    .optional(),
+  budgetRange: z
+    .string()
+    .optional(),
   message: z
     .string()
-    .min(10, "Project details must be at least 10 characters")
+    .min(3, "Please provide brief project details")
     .max(3000, "Message cannot exceed 3000 characters"),
   honeypot: z
     .string()
@@ -116,6 +128,13 @@ export async function POST(req: NextRequest) {
     // 5. Initialize Resend
     const resend = new Resend(resendApiKey);
 
+    const servicesText = data.services?.length
+      ? data.services.join(", ")
+      : data.service || "General Technical Consultation";
+    const budgetText = data.budgetRange || data.budget || "To be discussed";
+    const engagementText = data.engagementType || "Standard Engagement";
+    const timelineText = data.timeline || "Flexible / Not specified";
+
     // HTML Email Template for Admin notification
     const adminHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif; max-width: 600px; margin: 0 auto; background: #070B14; color: #FFFFFF; border-radius: 16px; overflow: hidden; border: 1px solid #1E2D54;">
@@ -124,7 +143,7 @@ export async function POST(req: NextRequest) {
             SYNTRIX<span style="color: #2FB8FF;">MESH</span> SOLUTIONS
           </h2>
           <p style="margin: 6px 0 0 0; color: #A8B3C7; font-size: 13px;">
-            New High-Priority Inbound Client Inquiry
+            Inbound Proposal Scope / Inquiry
           </p>
         </div>
 
@@ -143,12 +162,20 @@ export async function POST(req: NextRequest) {
               <td style="padding: 10px 0; color: #FFFFFF;"><a href="tel:${data.phone}" style="color: #FFFFFF; text-decoration: none;">${data.phone}</a></td>
             </tr>
             <tr>
-              <td style="padding: 10px 0; color: #64748B;">Service Requested:</td>
-              <td style="padding: 10px 0; color: #E5C467; font-weight: 600;">${data.service}</td>
+              <td style="padding: 10px 0; color: #64748B;">Services Selected:</td>
+              <td style="padding: 10px 0; color: #E5C467; font-weight: 600;">${servicesText}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 0; color: #64748B;">Engagement Type:</td>
+              <td style="padding: 10px 0; color: #FFFFFF;">${engagementText}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 0; color: #64748B;">Target Timeline:</td>
+              <td style="padding: 10px 0; color: #2FB8FF;">${timelineText}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; color: #64748B;">Budget Range:</td>
-              <td style="padding: 10px 0; color: #FFFFFF;">${data.budget}</td>
+              <td style="padding: 10px 0; color: #FFFFFF;">${budgetText}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; color: #64748B;">Submitted At:</td>
@@ -186,7 +213,7 @@ export async function POST(req: NextRequest) {
 
         <div style="padding: 28px 24px; line-height: 1.6; font-size: 14px; color: #A8B3C7;">
           <p style="margin-top: 0; color: #FFFFFF; font-size: 16px;">
-            We have safely received your inquiry for <strong>${data.service}</strong>.
+            We have safely received your inquiry for <strong>${servicesText}</strong>.
           </p>
           <p>
             Founder <strong>Manmeet Singh</strong> and our principal technology team are reviewing your project requirements. A dedicated engineer will get back to you with architectural recommendations within <strong>24 business hours</strong>.
@@ -220,7 +247,7 @@ export async function POST(req: NextRequest) {
         from: fromEmail,
         to: [toEmail],
         replyTo: data.email,
-        subject: `[Inquiry] ${data.service} - ${data.fullName}`,
+        subject: `[Quote Request] ${servicesText} - ${data.fullName}`,
         html: adminHtml,
       }),
       resend.emails.send({

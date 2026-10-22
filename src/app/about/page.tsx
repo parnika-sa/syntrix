@@ -16,6 +16,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { company } from "@/data/company";
+import { GlobalDeliveryMap } from "@/components/about/GlobalDeliveryMap";
 
 export const metadata: Metadata = {
   title: "About Us | Syntrixmesh Solutions Ludhiana",
@@ -228,7 +229,12 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Global Delivery Section */}
+        {/* Global Delivery Section: Built in Ludhiana, delivered worldwide */}
+        <div className="mb-24">
+          <GlobalDeliveryMap />
+        </div>
+
+        {/* Call to Action Banner */}
         <div className="text-center rounded-3xl glass-panel p-8 sm:p-12 border border-cyan-400/20 bg-navy-900/60">
           <div className="inline-flex items-center gap-2 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5" />

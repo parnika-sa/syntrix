@@ -120,14 +120,14 @@ export function ServicesBento() {
   };
 
   return (
-    <section id="services" className="relative py-20 sm:py-28 overflow-hidden">
+    <section id="services" className="relative py-16 md:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-400 border border-cyan-400/25 bg-cyan-400/5 mb-4">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Practice Areas & Capabilities</span>
+            <span>Core Engineering Disciplines</span>
           </div>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight">
             Six Core Disciplines,{" "}
@@ -223,7 +223,7 @@ export function ServicesBento() {
             href="/services"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white glass-panel border border-cyan-400/30 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all"
           >
-            <span>View full practice area matrix & case studies</span>
+            <span>Explore all services</span>
             <ArrowUpRight className="w-4 h-4 text-cyan-400" />
           </Link>
         </div>

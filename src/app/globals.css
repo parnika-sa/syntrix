@@ -12,7 +12,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   background-color: #070B14;
   color: #FFFFFF;
 }
@@ -134,7 +133,6 @@ html.lenis, html.lenis body {
 /* Below-the-fold content visibility optimization */
 .content-auto {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 650px;
 }
 
 /* Mobile performance optimizations */
@@ -170,14 +168,12 @@ html.lenis, html.lenis body {
   top: 1rem;
 }
 
-/* Subtle Hero Mesh Grid */
+/* Subtle Hero Mesh Grid - NO edge masking so text and 3D remain 100% full brightness */
 .bg-hero-mesh {
   background-image: 
-    linear-gradient(to right, rgba(47, 184, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(47, 184, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(47, 184, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(47, 184, 255, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
 
 /* Very light CSS-only noise texture */

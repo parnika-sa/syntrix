@@ -8,6 +8,7 @@ import Preloader from "@/components/ui/Preloader";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import PageTransition from "@/components/ui/PageTransition";
 import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
+import ScrollManager from "@/components/layout/ScrollManager";
 import { siteConfig } from "@/data/siteConfig";
 
 import CookieBanner from "@/components/ui/CookieBanner";
@@ -183,6 +184,7 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-[#070B14] text-mesh-text antialiased selection:bg-cyan-400 selection:text-navy-950`}
       >
         <SmoothScroll>
+          <ScrollManager />
           <a href="#main-content" className="skip-to-content">
             Skip to main content
           </a>

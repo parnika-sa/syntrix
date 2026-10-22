@@ -66,7 +66,7 @@ export function Hero3DContainer() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-[520px] mx-auto aspect-square flex items-center justify-center select-none"
+      className="relative w-full max-w-[520px] mx-auto aspect-square flex items-center justify-center select-none overflow-visible"
     >
       {shouldRender3D ? <LazyHeroMedallion3D /> : <HeroFallback />}
     </div>

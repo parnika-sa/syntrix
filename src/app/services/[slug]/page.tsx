@@ -24,6 +24,11 @@ const ServiceBackground = dynamic(
   () => import("@/components/canvas/ServiceBackground"),
   { ssr: false }
 );
+
+const LiveChatDemo = dynamic(
+  () => import("@/components/home/LiveChatDemo").then((mod) => mod.LiveChatDemo),
+  { ssr: false }
+);
 import { 
   servicesData, 
   getServiceBySlug, 
@@ -281,6 +286,13 @@ export default function ServiceDetailPage({
           ))}
         </div>
       </section>
+
+      {/* 3.5. INTERACTIVE LIVE AI CHAT DEMO (Exclusive to AI Chat & Automation) */}
+      {service.slug === "ai-chat-automation" && (
+        <div className="py-6 border-t border-cyan-400/10">
+          <LiveChatDemo />
+        </div>
+      )}
 
       {/* 4. BENEFITS SECTION */}
       <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 content-auto">

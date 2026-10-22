@@ -9,7 +9,7 @@ export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    // Completely disable on mobile screens (< 1024px) or coarse touch pointers
+    // 1. Completely disable on touch screens, mobile devices, and coarse pointers
     if (
       typeof window === "undefined" ||
       window.innerWidth < 1024 ||
@@ -23,7 +23,7 @@ export default function CustomCursor() {
 
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
-      setIsVisible(true);
+      if (!isVisible) setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -39,39 +39,52 @@ export default function CustomCursor() {
       setIsVisible(false);
     };
 
+    const handleMouseOut = (e: MouseEvent) => {
+      // If moving outside viewport boundary
+      if (!e.relatedTarget) {
+        setIsVisible(false);
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseover", handleMouseOver, { passive: true });
-    document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+    window.addEventListener("mouseout", handleMouseOut, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("mouseout", handleMouseOut);
     };
-  }, []);
+  }, [isVisible]);
 
   if (!enabled || !isVisible) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
-      {/* Outer blurred cyan glow aura */}
+    <div 
+      className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none"
+      aria-hidden="true"
+    >
+      {/* Outer crisp cyan ring - NO backdropFilter so text is NEVER blurred */}
       <div
-        className="fixed rounded-full transition-transform duration-100 ease-out -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none fixed rounded-full transition-transform duration-75 ease-out -translate-x-1/2 -translate-y-1/2"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          width: isHovered ? "56px" : "32px",
-          height: isHovered ? "56px" : "32px",
-          background: isHovered
-            ? "radial-gradient(circle, rgba(47, 184, 255, 0.35) 0%, rgba(30, 107, 255, 0) 70%)"
-            : "radial-gradient(circle, rgba(47, 184, 255, 0.2) 0%, rgba(30, 107, 255, 0) 70%)",
-          border: isHovered ? "1px solid rgba(47, 184, 255, 0.6)" : "1px solid rgba(47, 184, 255, 0.3)",
-          backdropFilter: isHovered ? "blur(1px)" : "none",
+          width: isHovered ? "40px" : "24px",
+          height: isHovered ? "40px" : "24px",
+          border: isHovered
+            ? "1.5px solid rgba(47, 184, 255, 0.75)"
+            : "1px solid rgba(47, 184, 255, 0.35)",
+          boxShadow: isHovered
+            ? "0 0 10px rgba(47, 184, 255, 0.3)"
+            : "none",
         }}
       />
       {/* Inner pinpoint dot */}
       <div
-        className="fixed w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#2FB8FF] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none fixed w-1.5 h-1.5 rounded-full bg-cyan-400 -translate-x-1/2 -translate-y-1/2"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,

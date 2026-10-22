@@ -162,17 +162,11 @@ export function LiveChatDemo() {
             {/* CTA Link */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
-                href="/contact?service=ai-chat-automation"
+                href="/get-quote?service=ai-chat-automation"
                 className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 shadow-cyan-glow hover:opacity-95 transition-all flex items-center gap-2 group"
               >
                 <span>Get this for your business</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/services/ai-chat-automation"
-                className="px-5 py-3 rounded-full text-sm font-medium text-mesh-muted hover:text-white transition-colors"
-              >
-                Explore AI Services →
               </Link>
             </div>
           </div>

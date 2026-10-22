@@ -131,7 +131,26 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Left Column: Contact Form with Suspense for query param handling */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 space-y-6">
+            {/* Scope Estimator Quick Callout */}
+            <div className="p-4 rounded-2xl glass-panel border border-cyan-400/25 bg-gradient-to-r from-navy-900/90 to-navy-950/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center text-cyan-400 shrink-0">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div className="text-xs">
+                  <span className="font-semibold text-white block">Need to configure specific project parameters?</span>
+                  <span className="text-mesh-muted">Use our interactive 3-step scope estimator.</span>
+                </div>
+              </div>
+              <Link
+                href="/get-quote"
+                className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-cyan-400 to-blue-600 shadow-cyan-glow hover:opacity-95 transition-opacity whitespace-nowrap"
+              >
+                Configure Scope →
+              </Link>
+            </div>
+
             <Suspense fallback={<div className="p-12 glass-panel rounded-3xl text-center">Loading form...</div>}>
               <ContactForm />
             </Suspense>

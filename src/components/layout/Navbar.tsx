@@ -332,10 +332,10 @@ export default function Navbar() {
               </a>
 
               <Link
-                href="/contact"
+                href="/get-quote"
                 className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-cyan-400 to-blue-600 shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 active:scale-95"
               >
-                <span>Get Consultation</span>
+                <span>Get a Free Quote</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -575,11 +575,11 @@ export default function Navbar() {
               </div>
 
               <Link
-                href="/contact"
+                href="/get-quote"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block w-full py-3.5 text-center rounded-xl font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all"
               >
-                Start Your Project
+                Get a Free Quote
               </Link>
 
               <a
@@ -587,7 +587,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block w-full py-3 text-center rounded-xl font-medium text-emerald-400 border border-emerald-500/30 bg-emerald-950/20 hover:bg-emerald-950/40 transition-colors"
+                className="block w-full py-3 text-center rounded-xl font-medium text-cyan-300 border border-cyan-400/30 bg-navy-950/80 hover:bg-cyan-500/10 transition-colors"
               >
                 Chat directly on WhatsApp
               </a>

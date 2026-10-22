@@ -196,8 +196,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/get-quote" className="hover:text-cyan-400 transition-colors block py-0.5 text-cyan-300 font-medium">
+                  Get a Free Quote
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  Request Free Quote
+                  Contact & Consultation
                 </Link>
               </li>
             </ul>

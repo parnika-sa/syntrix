@@ -15,7 +15,16 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       return;
     }
 
-    let lenisInstance: { raf: (time: number) => void; destroy: () => void } | null = null;
+    interface LenisHandle {
+      raf: (time: number) => void;
+      destroy: () => void;
+      scrollTo: (
+        target: number | HTMLElement | string,
+        options?: { immediate?: boolean; force?: boolean }
+      ) => void;
+    }
+
+    let lenisInstance: LenisHandle | null = null;
     let rafId: number | null = null;
 
     // 2. Defer loading Lenis until main thread is idle after first paint
@@ -30,6 +39,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
           smoothWheel: true,
           wheelMultiplier: 0.9,
         });
+
+        // Expose lenis to window for route change scroll coordination
+        type LenisWindow = Window & {
+          __lenis?: LenisHandle | null;
+        };
+        const win = window as LenisWindow;
+        win.__lenis = lenisInstance;
 
         const raf = (time: number) => {
           if (lenisInstance) {
@@ -50,6 +66,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
 
     return () => {
+      type LenisWindow = Window & {
+        __lenis?: unknown;
+      };
+      const win = window as LenisWindow;
+      win.__lenis = null;
       if (rafId) cancelAnimationFrame(rafId);
       if (lenisInstance) lenisInstance.destroy();
     };
