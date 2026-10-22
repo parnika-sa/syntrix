@@ -9,6 +9,7 @@ import {
   BarChart3,
   Calendar
 } from "lucide-react";
+import Card3D from "@/components/ui/Card3D";
 import { portfolioProjects } from "@/data/portfolio";
 import { siteConfig } from "@/data/siteConfig";
 
@@ -46,10 +47,10 @@ export default function PortfolioPage() {
         {/* Projects Grid */}
         <div className="space-y-12">
           {portfolioProjects.map((project) => (
-            <article
-              key={project.id}
-              className="rounded-3xl glass-panel p-6 sm:p-10 border border-cyan-400/20 bg-gradient-to-br from-navy-900/90 to-navy-850/80 shadow-xl relative overflow-hidden transition-all duration-300 hover:border-cyan-400/40"
-            >
+            <Card3D key={project.id} glowColor="cyan" maxTilt={4} className="rounded-3xl">
+              <article
+                className="rounded-3xl glass-panel p-6 sm:p-10 border border-cyan-400/20 bg-gradient-to-br from-navy-900/90 to-navy-850/80 shadow-xl relative overflow-hidden transition-all duration-300 hover:border-cyan-400/40"
+              >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 {/* Left meta & overview */}
@@ -134,7 +135,7 @@ export default function PortfolioPage() {
                     </div>
 
                     <Link
-                      href={`/contact?subject=${encodeURIComponent("Discuss similar project: " + project.title)}`}
+                      href={`/get-quote?service=${encodeURIComponent(project.category)}`}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-cyan-500/20 border border-cyan-400/40 hover:bg-cyan-500/30 transition-colors"
                     >
                       <span>Architect Similar System</span>
@@ -145,7 +146,8 @@ export default function PortfolioPage() {
 
               </div>
             </article>
-          ))}
+          </Card3D>
+        ))}
         </div>
 
         {/* Bottom CTA */}

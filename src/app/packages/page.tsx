@@ -6,6 +6,7 @@ import {
   CheckCircle2, 
   Sparkles 
 } from "lucide-react";
+import Card3D from "@/components/ui/Card3D";
 import { siteConfig } from "@/data/siteConfig";
 
 export const metadata: Metadata = {
@@ -114,61 +115,67 @@ export default function PackagesPage() {
       {/* 3 Package Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 mb-20">
         {packages.map((pkg) => (
-          <div
+          <Card3D
             key={pkg.id}
-            className={`rounded-3xl glass-panel p-8 sm:p-10 border bg-gradient-to-b from-navy-900/90 to-navy-950/90 flex flex-col justify-between relative overflow-hidden ${pkg.gradient}`}
+            glowColor={pkg.popular ? "cyan" : "gold"}
+            maxTilt={6}
+            className="rounded-3xl h-full"
           >
-            {pkg.popular && (
-              <div className="absolute top-0 right-0 bg-gradient-to-l from-cyan-400 to-blue-600 text-navy-950 text-[10px] font-heading font-bold uppercase tracking-widest px-4 py-1 rounded-bl-xl shadow-cyan-glow">
-                Most Popular
+            <div
+              className={`rounded-3xl glass-panel p-8 sm:p-10 border bg-gradient-to-b from-navy-900/90 to-navy-950/90 flex flex-col justify-between relative overflow-hidden h-full ${pkg.gradient}`}
+            >
+              {pkg.popular && (
+                <div className="absolute top-0 right-0 bg-gradient-to-l from-cyan-400 to-blue-600 text-navy-950 text-[10px] font-heading font-bold uppercase tracking-widest px-4 py-1 rounded-bl-xl shadow-cyan-glow">
+                  Most Popular
+                </div>
+              )}
+
+              <div>
+                <div className="mb-4">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-cyan-400 block mb-1">
+                    {pkg.tagline}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
+                    {pkg.name}
+                  </h2>
+                </div>
+
+                <p className="text-xs sm:text-sm text-mesh-muted leading-relaxed mb-6">
+                  {pkg.idealFor}
+                </p>
+
+                <div className="p-3.5 rounded-xl bg-navy-950/80 border border-cyan-400/15 mb-6 text-xs text-mesh-text">
+                  <span className="text-cyan-400 font-semibold block mb-0.5">Estimated Timeline:</span>
+                  {pkg.timeline}
+                </div>
+
+                <div className="space-y-3 mb-8">
+                  <span className="text-[11px] font-semibold text-gold-400 uppercase tracking-wider block">
+                    What&apos;s Included:
+                  </span>
+                  {pkg.highlights.map((item, i) => (
+                    <div key={i} className="flex items-start gap-2.5 text-xs text-mesh-text leading-relaxed">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
 
-            <div>
-              <div className="mb-4">
-                <span className="text-xs font-semibold uppercase tracking-widest text-cyan-400 block mb-1">
-                  {pkg.tagline}
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
-                  {pkg.name}
-                </h2>
-              </div>
-
-              <p className="text-xs sm:text-sm text-mesh-muted leading-relaxed mb-6">
-                {pkg.idealFor}
-              </p>
-
-              <div className="p-3.5 rounded-xl bg-navy-950/80 border border-cyan-400/15 mb-6 text-xs text-mesh-text">
-                <span className="text-cyan-400 font-semibold block mb-0.5">Estimated Timeline:</span>
-                {pkg.timeline}
-              </div>
-
-              <div className="space-y-3 mb-8">
-                <span className="text-[11px] font-semibold text-gold-400 uppercase tracking-wider block">
-                  What&apos;s Included:
-                </span>
-                {pkg.highlights.map((item, i) => (
-                  <div key={i} className="flex items-start gap-2.5 text-xs text-mesh-text leading-relaxed">
-                    <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </div>
-                ))}
+              <div className="pt-6 border-t border-cyan-400/10">
+                <Link
+                  href={`/get-quote?package=${encodeURIComponent(pkg.id)}`}
+                  className={`w-full py-3.5 rounded-full text-xs font-semibold text-center block transition-all duration-300 ${
+                    pkg.popular
+                      ? "text-navy-950 bg-gradient-to-r from-cyan-400 to-blue-400 shadow-cyan-glow hover:scale-105"
+                      : "text-white bg-white/5 border border-cyan-400/30 hover:border-cyan-400 hover:bg-cyan-400/10"
+                  }`}
+                >
+                  {pkg.cta} &rarr;
+                </Link>
               </div>
             </div>
-
-            <div className="pt-6 border-t border-cyan-400/10">
-              <Link
-                href={`/contact?package=${encodeURIComponent(pkg.name)}`}
-                className={`w-full py-3.5 rounded-full text-xs font-semibold text-center block transition-all duration-300 ${
-                  pkg.popular
-                    ? "text-navy-950 bg-gradient-to-r from-cyan-400 to-blue-400 shadow-cyan-glow hover:scale-105"
-                    : "text-white bg-white/5 border border-cyan-400/30 hover:border-cyan-400 hover:bg-cyan-400/10"
-                }`}
-              >
-                {pkg.cta} &rarr;
-              </Link>
-            </div>
-          </div>
+          </Card3D>
         ))}
       </div>
 

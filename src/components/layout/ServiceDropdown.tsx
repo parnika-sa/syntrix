@@ -68,7 +68,7 @@ export default function ServiceDropdown({ isOpen, onClose }: ServiceDropdownProp
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[620px] rounded-2xl bg-navy-950/95 backdrop-blur-2xl border border-cyan-400/25 p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),0_0_25px_rgba(47,184,255,0.15)] z-[100] overflow-hidden"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[620px] rounded-2xl bg-navy-950/95 backdrop-blur-2xl border border-cyan-400/25 p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),0_0_25px_rgba(47,184,255,0.15)] z-[100] overflow-hidden before:absolute before:-top-3 before:left-0 before:w-full before:h-3 before:content-['']"
           >
             {/* Subtle Ambient Radial Glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[60px] pointer-events-none" />

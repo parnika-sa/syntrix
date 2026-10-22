@@ -19,18 +19,12 @@ export default function MeshNetworkBackground() {
   const [shouldRenderCanvas, setShouldRenderCanvas] = useState(false);
 
   useEffect(() => {
-    // 1. Mobile & low-power detection
-    const isMobile = window.innerWidth < 768;
-    const isLowPower =
-      typeof navigator !== "undefined" &&
-      navigator.hardwareConcurrency &&
-      navigator.hardwareConcurrency <= 4;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Use lightweight static CSS gradient & grid on mobile/low-power/reduced motion
-    if (isMobile || isLowPower || prefersReducedMotion) {
+    // Use lightweight static CSS gradient & grid only on reduced motion
+    if (prefersReducedMotion) {
       setShouldRenderCanvas(false);
       return;
     }

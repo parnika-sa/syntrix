@@ -16,6 +16,7 @@ import {
 import { Hero3DContainer } from "@/components/home/Hero3DContainer";
 import { ServicesBento } from "@/components/home/ServicesBento";
 import TechMarquee from "@/components/ui/TechMarquee";
+import Card3D from "@/components/ui/Card3D";
 import { siteConfig } from "@/data/siteConfig";
 
 export const metadata: Metadata = {
@@ -78,10 +79,10 @@ export default function HomePage() {
         />
 
         <div className="relative z-10 max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10 items-center">
             
             {/* Left Side: Server-rendered HTML (Full brightness, zero edge masks) */}
-            <div className="lg:col-span-7 flex flex-col justify-center text-left">
+            <div className="md:col-span-7 flex flex-col justify-center text-left">
               
               {/* Eyebrow badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-cyan-400/30 text-xs sm:text-sm font-semibold text-cyan-300 shadow-[0_0_20px_rgba(47,184,255,0.15)] mb-6 w-fit">
@@ -122,7 +123,7 @@ export default function HomePage() {
               </div>
 
               {/* Truthful Trust Row (ONLY honest statements) */}
-              <div className="mt-10 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-mesh-text">
+              <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-mesh-text">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
                     <Check className="w-3 h-3 stroke-[3]" />
@@ -154,8 +155,8 @@ export default function HomePage() {
 
             </div>
 
-            {/* Right Side: 3D Core Scene (Desktop) & Clean Mobile Fallback */}
-            <div className="lg:col-span-5 flex items-center justify-center relative overflow-visible">
+            {/* Right Side: 3D Core Scene & Clean Mobile Fallback */}
+            <div className="md:col-span-5 flex items-center justify-center relative overflow-visible mt-6 md:mt-0">
               <Hero3DContainer />
             </div>
 
@@ -191,31 +192,30 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
           {processSteps.map((step, idx) => (
-            <div
-              key={idx}
-              className="p-5 rounded-2xl glass-panel border border-cyan-400/15 bg-navy-900/60 flex flex-col justify-between hover:border-cyan-400/40 hover:shadow-cyan-glow transition-all duration-300 group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white font-heading font-bold text-xs flex items-center justify-center shadow-cyan-glow group-hover:scale-105 transition-transform">
-                    {step.step}
-                  </span>
-                  <span className="text-[10px] uppercase font-semibold text-gold-400 tracking-wider">
-                    Step {idx + 1}
-                  </span>
-                </div>
+            <Card3D key={idx} glowColor="cyan" maxTilt={10} className="h-full rounded-2xl">
+              <div className="h-full p-5 rounded-2xl glass-panel border border-cyan-400/15 bg-navy-900/60 flex flex-col justify-between group-hover:border-cyan-400/40 group-hover:shadow-cyan-glow transition-all duration-300">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white font-heading font-bold text-xs flex items-center justify-center shadow-cyan-glow group-hover:scale-105 transition-transform">
+                      {step.step}
+                    </span>
+                    <span className="text-[10px] uppercase font-semibold text-gold-400 tracking-wider">
+                      Step {idx + 1}
+                    </span>
+                  </div>
 
-                <h3 className="font-heading font-bold text-base text-white mb-0.5 group-hover:text-cyan-300 transition-colors">
-                  {step.title}
-                </h3>
-                <span className="text-[11px] font-semibold text-cyan-400 block mb-2">
-                  {step.subtitle}
-                </span>
-                <p className="text-xs text-mesh-muted leading-relaxed">
-                  {step.description}
-                </p>
+                  <h3 className="font-heading font-bold text-base text-white mb-0.5 group-hover:text-cyan-300 transition-colors">
+                    {step.title}
+                  </h3>
+                  <span className="text-[11px] font-semibold text-cyan-400 block mb-2">
+                    {step.subtitle}
+                  </span>
+                  <p className="text-xs text-mesh-muted leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Card3D>
           ))}
         </div>
       </section>
@@ -272,47 +272,51 @@ export default function HomePage() {
             </div>
 
             {/* Engineering Desk Guarantee Card */}
-            <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl glass-panel border border-cyan-400/20 bg-navy-950/80 space-y-4">
-              <h3 className="font-heading font-bold text-white text-base sm:text-lg flex items-center gap-2">
-                <Award className="w-5 h-5 text-gold-400" aria-hidden="true" />
-                <span>Direct Engineering Guarantee</span>
-              </h3>
+            <div className="lg:col-span-5">
+              <Card3D glowColor="gold" maxTilt={8} className="rounded-2xl h-full">
+                <div className="p-6 sm:p-7 rounded-2xl glass-panel border border-cyan-400/20 bg-navy-950/80 space-y-4 h-full">
+                  <h3 className="font-heading font-bold text-white text-base sm:text-lg flex items-center gap-2">
+                    <Award className="w-5 h-5 text-gold-400" aria-hidden="true" />
+                    <span>Direct Engineering Guarantee</span>
+                  </h3>
 
-              <div className="space-y-3.5 text-xs sm:text-sm text-mesh-text">
-                <div className="flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <div>
-                    <strong className="text-white block">2-Hour Rapid Response</strong>
-                    Inquiries reviewed directly by principal engineers, not junior sales reps.
+                  <div className="space-y-3.5 text-xs sm:text-sm text-mesh-text">
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
+                      <div>
+                        <strong className="text-white block">2-Hour Rapid Response</strong>
+                        Inquiries reviewed directly by principal engineers, not junior sales reps.
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
+                      <div>
+                        <strong className="text-white block">Strict NDA Protected</strong>
+                        Your intellectual property, patents, and business concepts are 100% safeguarded.
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
+                      <div>
+                        <strong className="text-white block">Jhande, Ludhiana Headquarters</strong>
+                        Local accountability with global cross-border execution capabilities.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-cyan-400/15 text-center">
+                    <span className="text-xs text-mesh-muted">Prefer calling directly?</span>
+                    <a
+                      href={`tel:${siteConfig.contact.phoneClean}`}
+                      className="block text-cyan-400 font-heading font-bold text-base hover:underline mt-1"
+                    >
+                      {siteConfig.contact.phone}
+                    </a>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <div>
-                    <strong className="text-white block">Strict NDA Protected</strong>
-                    Your intellectual property, patents, and business concepts are 100% safeguarded.
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <div>
-                    <strong className="text-white block">Jhande, Ludhiana Headquarters</strong>
-                    Local accountability with global cross-border execution capabilities.
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-cyan-400/15 text-center">
-                <span className="text-xs text-mesh-muted">Prefer calling directly?</span>
-                <a
-                  href={`tel:${siteConfig.contact.phoneClean}`}
-                  className="block text-cyan-400 font-heading font-bold text-base hover:underline mt-1"
-                >
-                  {siteConfig.contact.phone}
-                </a>
-              </div>
+              </Card3D>
             </div>
 
           </div>

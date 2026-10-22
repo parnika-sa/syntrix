@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { 
   Bot, 
@@ -13,6 +13,7 @@ import {
   Sparkles, 
   Check 
 } from "lucide-react";
+import Card3D from "@/components/ui/Card3D";
 
 interface BentoItem {
   id: string;
@@ -106,19 +107,6 @@ const bentoItems: BentoItem[] = [
 ];
 
 export function ServicesBento() {
-  const [mousePos, setMousePos] = useState<Record<string, { x: number; y: number }>>({});
-
-  const handleMouseMove = (id: string, e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos((prev) => ({
-      ...prev,
-      [id]: {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      },
-    }));
-  };
-
   return (
     <section id="services" className="relative py-16 md:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -144,74 +132,71 @@ export function ServicesBento() {
         <div className="grid grid-cols-12 gap-6">
           {bentoItems.map((item) => {
             const Icon = item.icon;
-            const pos = mousePos[item.id] || { x: 0, y: 0 };
 
             return (
               <div
                 key={item.id}
-                onMouseMove={(e) => handleMouseMove(item.id, e)}
-                className={`${item.gridClass} group relative rounded-3xl p-6 sm:p-8 bg-navy-900/60 border border-white/10 hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg`}
+                className={`${item.gridClass} h-full`}
               >
-                {/* Mouse Spotlight Hover Glow */}
-                <div
-                  className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: `radial-gradient(400px circle at ${pos.x}px ${pos.y}px, rgba(47, 184, 255, 0.12), transparent 80%)`,
-                  }}
-                  aria-hidden="true"
-                />
+                <Card3D
+                  glowColor={item.isFeatured ? "gold" : "cyan"}
+                  maxTilt={6}
+                  className="h-full rounded-3xl"
+                >
+                  <div className="relative h-full rounded-3xl p-6 sm:p-8 bg-navy-900/60 border border-white/10 group-hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg">
+                    {/* Top Strip */}
+                    <div>
+                      <div className="flex items-center justify-between gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:bg-cyan-500/20 transition-all">
+                          <Icon className="w-6 h-6" />
+                        </div>
 
-                {/* Top Strip */}
-                <div>
-                  <div className="flex items-center justify-between gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:bg-cyan-500/20 transition-all">
-                      <Icon className="w-6 h-6" />
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                          item.isFeatured
+                            ? "bg-gold-500/10 text-gold-300 border-gold-400/30"
+                            : "bg-white/5 text-mesh-muted border-white/10"
+                        }`}>
+                          {item.badge}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl sm:text-2xl font-heading font-bold text-white group-hover:text-cyan-300 transition-colors">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 text-xs sm:text-sm text-cyan-400/90 font-medium">
+                        {item.tagline}
+                      </p>
+
+                      <p className="mt-3 text-sm text-mesh-muted leading-relaxed">
+                        {item.oneLiner}
+                      </p>
                     </div>
 
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
-                      item.isFeatured
-                        ? "bg-gold-500/10 text-gold-300 border-gold-400/30"
-                        : "bg-white/5 text-mesh-muted border-white/10"
-                    }`}>
-                      {item.badge}
-                    </span>
-                  </div>
+                    {/* Bottom Chips & Action Link */}
+                    <div className="mt-6 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex flex-wrap gap-2">
+                        {item.chips.map((chip, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-navy-950/80 text-gray-300 border border-white/5"
+                          >
+                            <Check className="w-3 h-3 text-cyan-400" />
+                            <span>{chip}</span>
+                          </span>
+                        ))}
+                      </div>
 
-                  <h3 className="text-xl sm:text-2xl font-heading font-bold text-white group-hover:text-cyan-300 transition-colors">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-2 text-xs sm:text-sm text-cyan-400/90 font-medium">
-                    {item.tagline}
-                  </p>
-
-                  <p className="mt-3 text-sm text-mesh-muted leading-relaxed">
-                    {item.oneLiner}
-                  </p>
-                </div>
-
-                {/* Bottom Chips & Action Link */}
-                <div className="mt-6 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    {item.chips.map((chip, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-navy-950/80 text-gray-300 border border-white/5"
+                      <Link
+                        href={`/services/${item.slug}`}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors"
                       >
-                        <Check className="w-3 h-3 text-cyan-400" />
-                        <span>{chip}</span>
-                      </span>
-                    ))}
+                        <span>Explore details</span>
+                        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
-
-                  <Link
-                    href={`/services/${item.slug}`}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors"
-                  >
-                    <span>Explore details</span>
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </Link>
-                </div>
+                </Card3D>
               </div>
             );
           })}

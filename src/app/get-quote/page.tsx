@@ -1,9 +1,15 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Calculator } from "lucide-react";
 import GetQuoteForm from "@/components/quote/GetQuoteForm";
 import { siteConfig } from "@/data/siteConfig";
+
+const MeshNetworkBackground = dynamic(
+  () => import("@/components/canvas/MeshNetworkBackground"),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: "Get a Free Quote | Syntrixmesh Solutions",
@@ -23,6 +29,9 @@ export const metadata: Metadata = {
 export default function GetQuotePage() {
   return (
     <div className="relative py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 3D ambient constellation background */}
+      <MeshNetworkBackground />
+
       {/* Background ambient glow */}
       <div 
         className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" 

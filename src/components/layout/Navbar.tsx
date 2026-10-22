@@ -15,7 +15,11 @@ import {
   TrendingUp, 
   Server, 
   Bot, 
-  Layers 
+  Layers,
+  PackageCheck,
+  HelpCircle,
+  BookOpen,
+  Sparkles
 } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
 import { servicesNav } from "@/data/services";
@@ -43,6 +47,65 @@ export default function Navbar() {
   const drawerRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const servicesContainerRef = useRef<HTMLDivElement | null>(null);
+  const resourcesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const servicesTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const resourcesTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleServicesEnter = () => {
+    if (servicesTimerRef.current) clearTimeout(servicesTimerRef.current);
+    if (resourcesTimerRef.current) clearTimeout(resourcesTimerRef.current);
+    setResourcesDropdownOpen(false);
+    setServicesDropdownOpen(true);
+  };
+
+  const handleServicesLeave = () => {
+    servicesTimerRef.current = setTimeout(() => {
+      setServicesDropdownOpen(false);
+    }, 200);
+  };
+
+  const handleResourcesEnter = () => {
+    if (resourcesTimerRef.current) clearTimeout(resourcesTimerRef.current);
+    if (servicesTimerRef.current) clearTimeout(servicesTimerRef.current);
+    setServicesDropdownOpen(false);
+    setResourcesDropdownOpen(true);
+  };
+
+  const handleResourcesLeave = () => {
+    resourcesTimerRef.current = setTimeout(() => {
+      setResourcesDropdownOpen(false);
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (servicesTimerRef.current) clearTimeout(servicesTimerRef.current);
+      if (resourcesTimerRef.current) clearTimeout(resourcesTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        servicesDropdownOpen &&
+        servicesContainerRef.current &&
+        !servicesContainerRef.current.contains(e.target as Node)
+      ) {
+        setServicesDropdownOpen(false);
+      }
+      if (
+        resourcesDropdownOpen &&
+        resourcesContainerRef.current &&
+        !resourcesContainerRef.current.contains(e.target as Node)
+      ) {
+        setResourcesDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [servicesDropdownOpen, resourcesDropdownOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -162,9 +225,10 @@ export default function Navbar() {
 
               {/* Services Dropdown */}
               <div
+                ref={servicesContainerRef}
                 className="relative"
-                onMouseEnter={() => setServicesDropdownOpen(true)}
-                onMouseLeave={() => setServicesDropdownOpen(false)}
+                onMouseEnter={handleServicesEnter}
+                onMouseLeave={handleServicesLeave}
               >
                 <div className="flex items-center">
                   <Link
@@ -233,9 +297,10 @@ export default function Navbar() {
 
               {/* Resources Dropdown */}
               <div
+                ref={resourcesContainerRef}
                 className="relative"
-                onMouseEnter={() => setResourcesDropdownOpen(true)}
-                onMouseLeave={() => setResourcesDropdownOpen(false)}
+                onMouseEnter={handleResourcesEnter}
+                onMouseLeave={handleResourcesLeave}
               >
                 <button
                   type="button"
@@ -253,7 +318,7 @@ export default function Navbar() {
                       setResourcesDropdownOpen(false);
                     }
                   }}
-                  className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                     pathname === "/packages" || pathname === "/faq" || pathname.startsWith("/blog")
                       ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
                       : "text-mesh-text hover:text-white hover:bg-white/5"
@@ -270,40 +335,67 @@ export default function Navbar() {
                 {resourcesDropdownOpen && (
                   <div
                     id="resources-dropdown-panel"
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 rounded-2xl bg-navy-950/95 backdrop-blur-xl border border-cyan-400/25 p-3 shadow-2xl z-[100]"
+                    onMouseEnter={handleResourcesEnter}
+                    onMouseLeave={handleResourcesLeave}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl bg-navy-950/95 backdrop-blur-2xl border border-cyan-400/25 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(47,184,255,0.15)] z-[100] before:absolute before:-top-3 before:left-0 before:w-full before:h-3 before:content-[''] animate-fadeIn"
                   >
+                    {/* Header accent */}
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-cyan-400/15 px-2">
+                      <span className="text-[10px] font-heading font-semibold uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+                        <Sparkles className="w-3 h-3 text-cyan-400" />
+                        Resources &amp; Insights
+                      </span>
+                    </div>
+
                     <Link
                       href="/packages"
                       onClick={() => setResourcesDropdownOpen(false)}
-                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cyan-400/10 transition-all duration-200 group"
                     >
-                      <div>
-                        <div className="font-semibold text-white group-hover:text-cyan-400">Packages</div>
+                      <div className="w-9 h-9 rounded-lg bg-navy-900 border border-cyan-400/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-400 group-hover:text-navy-950 transition-all shrink-0">
+                        <PackageCheck className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-white group-hover:text-cyan-400 transition-colors">
+                          Packages
+                        </div>
                         <div className="text-[11px] text-mesh-muted">3 Engagement Models</div>
                       </div>
-                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-400" />
                     </Link>
+
                     <Link
                       href="/faq"
                       onClick={() => setResourcesDropdownOpen(false)}
-                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cyan-400/10 transition-all duration-200 group"
                     >
-                      <div>
-                        <div className="font-semibold text-white group-hover:text-cyan-400">FAQ</div>
-                        <div className="text-[11px] text-mesh-muted">18 Questions & Answers</div>
+                      <div className="w-9 h-9 rounded-lg bg-navy-900 border border-cyan-400/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-400 group-hover:text-navy-950 transition-all shrink-0">
+                        <HelpCircle className="w-4 h-4" />
                       </div>
-                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-white group-hover:text-cyan-400 transition-colors">
+                          FAQ
+                        </div>
+                        <div className="text-[11px] text-mesh-muted">18 Questions &amp; Answers</div>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-400" />
                     </Link>
+
                     <Link
                       href="/blog"
                       onClick={() => setResourcesDropdownOpen(false)}
-                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cyan-400/10 hover:text-cyan-400 text-sm font-medium text-white transition-colors group"
+                      className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cyan-400/10 transition-all duration-200 group"
                     >
-                      <div>
-                        <div className="font-semibold text-white group-hover:text-cyan-400">Engineering Blog</div>
+                      <div className="w-9 h-9 rounded-lg bg-navy-900 border border-cyan-400/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-400 group-hover:text-navy-950 transition-all shrink-0">
+                        <BookOpen className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-white group-hover:text-cyan-400 transition-colors">
+                          Engineering Blog
+                        </div>
                         <div className="text-[11px] text-mesh-muted">Technical Deep Dives</div>
                       </div>
-                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-400" />
                     </Link>
                   </div>
                 )}
@@ -343,10 +435,10 @@ export default function Navbar() {
             {/* Mobile Menu Hamburger Button */}
             <div className="flex lg:hidden items-center gap-2">
               <Link
-                href="/contact"
-                className="text-xs px-3 py-1.5 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/30 sm:hidden"
+                href="/get-quote"
+                className="text-xs px-3.5 py-1.5 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/30 sm:hidden font-medium hover:bg-cyan-400/20 transition-all"
               >
-                Consult
+                Get Quote
               </Link>
               <button
                 ref={menuButtonRef}
@@ -400,11 +492,11 @@ export default function Navbar() {
 
             <div className="flex items-center gap-3">
               <Link
-                href="/contact"
+                href="/get-quote"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-xs px-3 py-1.5 rounded-full bg-cyan-400/15 text-cyan-400 border border-cyan-400/30 font-medium"
+                className="text-xs px-3.5 py-1.5 rounded-full bg-cyan-400/15 text-cyan-400 border border-cyan-400/30 font-medium hover:bg-cyan-400/25 transition-all"
               >
-                Consult
+                Get Quote
               </Link>
               <button
                 ref={closeButtonRef}

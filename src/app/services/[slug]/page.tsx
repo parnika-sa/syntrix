@@ -19,6 +19,7 @@ import SpotlightCard from "@/components/ui/SpotlightCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 import AnimatedTimeline from "@/components/ui/AnimatedTimeline";
 import FAQAccordion from "@/components/ui/FAQAccordion";
+import Card3D from "@/components/ui/Card3D";
 
 const ServiceBackground = dynamic(
   () => import("@/components/canvas/ServiceBackground"),
@@ -244,45 +245,46 @@ export default function ServiceDetailPage({
         <SectionHeading
           badge="DETAILED DELIVERABLES"
           title="What We Engineer"
-          highlight="Under This Practice"
-          subtitle="Three specialized sub-practices executed by principal specialists with zero outsourcing."
+          highlight="Under This Discipline"
+          subtitle="Three specialized engineering disciplines executed by principal specialists with zero outsourcing."
           align="center"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {service.subServices.map((sub, index) => (
-            <SpotlightCard
-              key={index}
-              className="p-8 flex flex-col justify-between group"
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-navy-900 border border-cyan-400/25 flex items-center justify-center text-cyan-400 shadow-cyan-glow mb-6 group-hover:scale-110 transition-transform">
-                  <span className="font-heading font-bold text-sm">0{index + 1}</span>
+            <Card3D key={index} glowColor="cyan" maxTilt={6} className="rounded-3xl h-full">
+              <SpotlightCard
+                className="p-8 flex flex-col justify-between group h-full"
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-navy-900 border border-cyan-400/25 flex items-center justify-center text-cyan-400 shadow-cyan-glow mb-6 group-hover:scale-110 transition-transform">
+                    <span className="font-heading font-bold text-sm">0{index + 1}</span>
+                  </div>
+
+                  <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-3 group-hover:text-cyan-400 transition-colors">
+                    {sub.title}
+                  </h3>
+
+                  <p className="text-sm text-mesh-text leading-relaxed mb-6">
+                    {sub.description}
+                  </p>
+
+                  <div className="space-y-2.5 pt-4 border-t border-cyan-400/10">
+                    <span className="text-[11px] font-semibold text-gold-400 uppercase tracking-wider block mb-2">
+                      Scope &amp; Features:
+                    </span>
+                    {sub.features.map((feature, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-2.5 text-xs text-mesh-text">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                        <span className="text-white/90 font-medium leading-relaxed">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white mb-3 group-hover:text-cyan-400 transition-colors">
-                  {sub.title}
-                </h3>
-
-                <p className="text-sm text-mesh-text leading-relaxed mb-6">
-                  {sub.description}
-                </p>
-
-                <div className="space-y-2.5 pt-4 border-t border-cyan-400/10">
-                  <span className="text-[11px] font-semibold text-gold-400 uppercase tracking-wider block mb-2">
-                    Scope & Features:
-                  </span>
-                  {sub.features.map((feature, fIdx) => (
-                    <div key={fIdx} className="flex items-start gap-2.5 text-xs text-mesh-text">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                      <span className="text-white/90 font-medium leading-relaxed">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </SpotlightCard>
+              </SpotlightCard>
+            </Card3D>
           ))}
         </div>
       </section>

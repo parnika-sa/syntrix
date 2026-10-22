@@ -21,20 +21,21 @@ export function Hero3DContainer() {
     // 1. Guard against non-browser environments
     if (typeof window === "undefined") return;
 
-    // 2. Strict mobile / screen size check (desktop/tablet >= 1024px)
-    const isDesktop = window.innerWidth >= 1024;
-
-    // 3. Hardware concurrency check (must have > 4 CPU threads)
-    const concurrency = navigator.hardwareConcurrency || 4;
-    const hasSufficientCPU = concurrency > 4;
-
-    // 4. Accessibility check (no prefers-reduced-motion)
+    // 2. Accessibility check (no prefers-reduced-motion)
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // If device does not qualify, remain strictly on CSS fallback
-    if (!isDesktop || !hasSufficientCPU || prefersReducedMotion) {
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    // 3. WebGL capability check
+    try {
+      const testCanvas = document.createElement("canvas");
+      const gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
+      if (!gl) return;
+    } catch {
       return;
     }
 

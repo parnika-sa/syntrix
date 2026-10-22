@@ -34,18 +34,22 @@ export default function HeroMedallion3D() {
     // 1. Scene setup
     const scene = new THREE.Scene();
 
-    // 2. Camera setup - Positioned at z=12 to give ample safe margins against clipping
+    // 2. Camera setup - Positioned adaptively based on width for zero edge clipping
+    const isSmallScreen = width < 500 || window.innerWidth < 640;
+    const cameraZ = isSmallScreen ? 14.5 : 12;
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 12);
+    camera.position.set(0, 0, cameraZ);
 
     // 3. Renderer with capped DPR and tone mapping
+    const isTouch = "ontouchstart" in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+    const maxDpr = isTouch ? 1.0 : 1.5;
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
 
@@ -236,6 +240,30 @@ export default function HeroMedallion3D() {
       }
     };
 
+    // 9. Pointer Drag Interaction for Touch & Mouse
+    let isDragging = false;
+    let prevPointer = { x: 0, y: 0 };
+
+    const onPointerDown = (e: PointerEvent) => {
+      isDragging = true;
+      prevPointer = { x: e.clientX, y: e.clientY };
+    };
+
+    const onPointerUp = () => {
+      isDragging = false;
+    };
+
+    const onPointerMoveWrapper = (e: PointerEvent) => {
+      onPointerMove(e);
+      if (isDragging) {
+        const deltaX = e.clientX - prevPointer.x;
+        const deltaY = e.clientY - prevPointer.y;
+        wireMesh.rotation.y += deltaX * 0.006;
+        wireMesh.rotation.x += deltaY * 0.006;
+        prevPointer = { x: e.clientX, y: e.clientY };
+      }
+    };
+
     const onClick = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       mouseCoord.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -252,7 +280,10 @@ export default function HeroMedallion3D() {
       }
     };
 
-    container.addEventListener("mousemove", onPointerMove);
+    container.addEventListener("pointerdown", onPointerDown);
+    container.addEventListener("pointermove", onPointerMoveWrapper);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
     container.addEventListener("click", onClick);
 
     // 10. Resize Handling
@@ -262,6 +293,8 @@ export default function HeroMedallion3D() {
       const newHeight = container.clientHeight;
       if (newWidth === 0 || newHeight === 0) return;
 
+      const isSmall = newWidth < 500 || window.innerWidth < 640;
+      camera.position.z = isSmall ? 14.5 : 12;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
@@ -345,7 +378,10 @@ export default function HeroMedallion3D() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", handleResize);
-      container.removeEventListener("mousemove", onPointerMove);
+      container.removeEventListener("pointerdown", onPointerDown);
+      container.removeEventListener("pointermove", onPointerMoveWrapper);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
       container.removeEventListener("click", onClick);
 
       scene.remove(coreGroup);

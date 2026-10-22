@@ -318,7 +318,7 @@ function QuoteFormContent() {
                 Step 1: Select Required Services
               </h3>
               <p className="text-xs sm:text-sm text-mesh-muted">
-                Choose one or multiple practice areas you need engineered.
+                Choose one or multiple engineering disciplines you need engineered.
               </p>
             </div>
 

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { company } from "@/data/company";
 import { GlobalDeliveryMap } from "@/components/about/GlobalDeliveryMap";
+import Card3D from "@/components/ui/Card3D";
 
 export const metadata: Metadata = {
   title: "About Us | Syntrixmesh Solutions Ludhiana",
@@ -146,20 +147,19 @@ export default function AboutPage() {
             {pillars.map((pillar) => {
               const Icon = pillar.icon;
               return (
-                <div
-                  key={pillar.title}
-                  className="rounded-2xl glass-panel p-6 border border-cyan-400/20 bg-navy-900/50 hover:border-cyan-400/40 transition-colors"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 mb-5">
-                    <Icon className="w-6 h-6" />
+                <Card3D key={pillar.title} glowColor="cyan" maxTilt={8} className="rounded-2xl h-full">
+                  <div className="rounded-2xl glass-panel p-6 border border-cyan-400/20 bg-navy-900/50 group-hover:border-cyan-400/40 transition-colors h-full flex flex-col">
+                    <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 mb-5 shrink-0">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-heading font-semibold text-lg text-white mb-2">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-xs text-mesh-muted leading-relaxed">
+                      {pillar.desc}
+                    </p>
                   </div>
-                  <h3 className="font-heading font-semibold text-lg text-white mb-2">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-xs text-mesh-muted leading-relaxed">
-                    {pillar.desc}
-                  </p>
-                </div>
+                </Card3D>
               );
             })}
           </div>
@@ -167,66 +167,68 @@ export default function AboutPage() {
 
         {/* Founder Section */}
         <div id="founder" className="scroll-mt-28 mb-24">
-          <div className="rounded-3xl glass-panel p-8 sm:p-12 border border-gold-400/30 bg-gradient-to-r from-navy-900/90 via-navy-850/90 to-navy-900/90 relative overflow-hidden">
-            <div className="absolute -right-20 -bottom-20 w-72 h-72 rounded-full bg-gold-500/10 blur-[80px] pointer-events-none" />
+          <Card3D glowColor="gold" maxTilt={4} className="rounded-3xl">
+            <div className="rounded-3xl glass-panel p-8 sm:p-12 border border-gold-400/30 bg-gradient-to-r from-navy-900/90 via-navy-850/90 to-navy-900/90 relative overflow-hidden">
+              <div className="absolute -right-20 -bottom-20 w-72 h-72 rounded-full bg-gold-500/10 blur-[80px] pointer-events-none" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-4 flex flex-col items-center text-center">
-                <div className="w-32 h-32 rounded-3xl p-1 bg-gradient-to-tr from-cyan-400 to-gold-400 shadow-2xl relative mb-4">
-                  <div className="w-full h-full rounded-[22px] bg-navy-950 flex items-center justify-center overflow-hidden p-2">
-                    <Image
-                      src="/logo.png"
-                      alt="Syntrixmesh Emblem"
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-contain"
-                    />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-4 flex flex-col items-center text-center">
+                  <div className="w-32 h-32 rounded-3xl p-1 bg-gradient-to-tr from-cyan-400 to-gold-400 shadow-2xl relative mb-4">
+                    <div className="w-full h-full rounded-[22px] bg-navy-950 flex items-center justify-center overflow-hidden p-2">
+                      <Image
+                        src="/logo.png"
+                        alt="Syntrixmesh Emblem"
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-heading font-bold text-white">
+                    {company.founder.name}
+                  </h3>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-400 mt-1">
+                    {company.founder.role}
+                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-xs text-mesh-muted">
+                    <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Ludhiana, Punjab, India</span>
                   </div>
                 </div>
-                <h3 className="text-xl font-heading font-bold text-white">
-                  {company.founder.name}
-                </h3>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gold-400 mt-1">
-                  {company.founder.role}
-                </p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-mesh-muted">
-                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Ludhiana, Punjab, India</span>
-                </div>
-              </div>
 
-              <div className="lg:col-span-8 space-y-4">
-                <span className="text-xs font-semibold uppercase tracking-widest text-gold-400 block">
-                  Leadership & Architectural Direction
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
-                  Engineering Directly with Business Owners & CTOs
-                </h2>
-                <p className="text-sm sm:text-base text-mesh-text leading-relaxed">
-                  {company.founder.bio}
-                </p>
-                <p className="text-sm text-mesh-muted leading-relaxed">
-                  Every project at Syntrixmesh Solutions is directly overseen by Manmeet Singh to ensure architecture adheres to strict scalability standards, high-throughput caching, clean maintainable code, and robust data protection.
-                </p>
-                <div className="pt-4 flex flex-wrap gap-4">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-gold-500 to-gold-600 shadow-lg hover:opacity-95 transition-opacity"
-                  >
-                    <span>Consult with Manmeet</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                  <a
-                    href={`mailto:${company.contact.email}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-medium text-mesh-text glass-panel border border-white/10 hover:border-gold-400/40 hover:text-white transition-colors"
-                  >
-                    <Mail className="w-3.5 h-3.5 text-gold-400" />
-                    <span>{company.contact.email}</span>
-                  </a>
+                <div className="lg:col-span-8 space-y-4">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-gold-400 block">
+                    Leadership &amp; Architectural Direction
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
+                    Engineering Directly with Business Owners &amp; CTOs
+                  </h2>
+                  <p className="text-sm sm:text-base text-mesh-text leading-relaxed">
+                    {company.founder.bio}
+                  </p>
+                  <p className="text-sm text-mesh-muted leading-relaxed">
+                    Every project at Syntrixmesh Solutions is directly overseen by Manmeet Singh to ensure architecture adheres to strict scalability standards, high-throughput caching, clean maintainable code, and robust data protection.
+                  </p>
+                  <div className="pt-4 flex flex-wrap gap-4">
+                    <Link
+                      href="/get-quote"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-gold-500 to-gold-600 shadow-lg hover:opacity-95 transition-opacity"
+                    >
+                      <span>Consult with Manmeet</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                    <a
+                      href={`mailto:${company.contact.email}`}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-medium text-mesh-text glass-panel border border-white/10 hover:border-gold-400/40 hover:text-white transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-gold-400" />
+                      <span>{company.contact.email}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Card3D>
         </div>
 
         {/* Global Delivery Section: Built in Ludhiana, delivered worldwide */}

@@ -12,16 +12,11 @@ export default function ServiceBackground({ slug }: ServiceBackgroundProps) {
   const [shouldRenderCanvas, setShouldRenderCanvas] = useState(false);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const isLowPower =
-      typeof navigator !== "undefined" &&
-      navigator.hardwareConcurrency &&
-      navigator.hardwareConcurrency <= 4;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (isMobile || isLowPower || prefersReducedMotion) {
+    if (prefersReducedMotion) {
       setShouldRenderCanvas(false);
       return;
     }
@@ -65,8 +60,9 @@ export default function ServiceBackground({ slug }: ServiceBackgroundProps) {
 
     window.addEventListener("resize", handleResize, { passive: true });
 
-    // Neural nodes: 16 nodes on desktop for low CPU consumption
-    const nodeCount = 16;
+    // Neural nodes: 10 on mobile, 16 on desktop for ultra-low CPU consumption
+    const isMobile = window.innerWidth < 768;
+    const nodeCount = isMobile ? 10 : 16;
     const nodes: { x: number; y: number; vx: number; vy: number; radius: number; pulse: number }[] = [];
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
