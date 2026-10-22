@@ -25,69 +25,76 @@ function createMedallionTexture(): THREE.CanvasTexture {
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return new THREE.CanvasTexture(canvas);
-
-  // Background circle
-  ctx.fillStyle = "#070B14";
-  ctx.fillRect(0, 0, size, size);
-
-  const cx = size / 2;
-  const cy = size / 2;
-  const r = size * 0.44;
-
-  // Outer gold rim
-  const grad = ctx.createLinearGradient(0, 0, size, size);
-  grad.addColorStop(0, "#E8CF88");
-  grad.addColorStop(0.5, "#C9A24B");
-  grad.addColorStop(1, "#94732A");
-
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = 14;
-  ctx.stroke();
-
-  // Thin inner cyan border
-  ctx.beginPath();
-  ctx.arc(cx, cy, r - 12, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(47, 184, 255, 0.45)";
-  ctx.lineWidth = 2.5;
-  ctx.stroke();
-
-  // Subtle circular radial glow
-  const radial = ctx.createRadialGradient(cx, cy, 10, cx, cy, r - 20);
-  radial.addColorStop(0, "rgba(47, 184, 255, 0.18)");
-  radial.addColorStop(0.7, "rgba(7, 11, 20, 0.85)");
-  radial.addColorStop(1, "rgba(7, 11, 20, 1)");
-  ctx.fillStyle = radial;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r - 14, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Gold text with soft shadow
-  ctx.shadowColor = "rgba(47, 184, 255, 0.6)";
-  ctx.shadowBlur = 18;
-  const textGrad = ctx.createLinearGradient(cx - 80, cy - 80, cx + 80, cy + 80);
-  textGrad.addColorStop(0, "#FFFFFF");
-  textGrad.addColorStop(0.3, "#F4DB96");
-  textGrad.addColorStop(0.7, "#C9A24B");
-  textGrad.addColorStop(1, "#8A6926");
-  ctx.fillStyle = textGrad;
-
-  // "SM" Monogram
-  ctx.font = "bold 140px 'Cinzel', 'Playfair Display', Georgia, serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("SM", cx, cy - 10);
-
-  // Subtitle "SYNTRIX" below
-  ctx.shadowBlur = 0;
-  ctx.font = "bold 22px 'Space Grotesk', system-ui, sans-serif";
-  ctx.fillStyle = "#E8CF88";
-  ctx.fillText("SYNTRIX", cx, cy + 86);
-
   const texture = new THREE.CanvasTexture(canvas);
-  texture.needsUpdate = true;
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  const drawFace = (logoImg?: HTMLImageElement) => {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, size, size);
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const r = size * 0.44;
+
+    // Outer rich gold bevel ring
+    const grad = ctx.createLinearGradient(0, 0, size, size);
+    grad.addColorStop(0, "#E8CF88");
+    grad.addColorStop(0.35, "#F4DB96");
+    grad.addColorStop(0.7, "#C9A24B");
+    grad.addColorStop(1, "#8A6926");
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Dark inset ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - 7, 0, Math.PI * 2);
+    ctx.fillStyle = "#070B14";
+    ctx.fill();
+
+    // Pure White Inner Disc (official logo medallion look)
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - 14, 0, Math.PI * 2);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fill();
+
+    // Subtle ivory radial gradient for realistic coin bevel
+    const radial = ctx.createRadialGradient(cx, cy, 10, cx, cy, r - 14);
+    radial.addColorStop(0, "rgba(255, 255, 255, 1)");
+    radial.addColorStop(0.85, "rgba(250, 250, 252, 1)");
+    radial.addColorStop(1, "rgba(215, 220, 230, 0.95)");
+    ctx.fillStyle = radial;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - 14, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw the official logo.png
+    if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
+      const imgW = (r - 18) * 1.5;
+      const imgH = (r - 18) * 1.5;
+      ctx.drawImage(logoImg, cx - imgW / 2, cy - imgH / 2, imgW, imgH);
+    } else {
+      ctx.font = "bold 130px 'Cinzel', serif";
+      ctx.fillStyle = "#070B14";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("SM", cx, cy);
+    }
+
+    texture.needsUpdate = true;
+  };
+
+  drawFace();
+
+  // Load the real logo image
+  const img = new Image();
+  img.src = "/logo.png";
+  img.onload = () => {
+    drawFace(img);
+  };
+
   return texture;
 }
 
@@ -132,10 +139,10 @@ export default function HeroMedallion3D() {
     container.appendChild(renderer.domElement);
 
     // 4. Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.2);
+    const keyLight = new THREE.DirectionalLight(0xfff5e6, 2.4);
     keyLight.position.set(5, 5, 6);
     scene.add(keyLight);
 
@@ -143,45 +150,57 @@ export default function HeroMedallion3D() {
     cyanLight.position.set(-4, -2, 4);
     scene.add(cyanLight);
 
-    const goldLight = new THREE.PointLight(0xc9a24b, 3.0, 12);
+    const goldLight = new THREE.PointLight(0xc9a24b, 3.2, 12);
     goldLight.position.set(4, -3, -2);
     scene.add(goldLight);
 
-    // 5. HYBRID OPTION 4: 3D Floating Gold "SM" Medallion + Gyroscopic Cyber Rings
+    // 5. HYBRID OPTION 4: Upright 3D "SM" Medallion + Gyroscopic Cyber Rings
     const centralGroup = new THREE.Group();
     scene.add(centralGroup);
 
-    // A. 3D Medallion Disc
+    // A. Upright 3D Medallion (Never spins on Z, always readable!)
+    const medallionGroup = new THREE.Group();
+    centralGroup.add(medallionGroup);
+
     const medallionTexture = createMedallionTexture();
-    const discGeo = new THREE.CylinderGeometry(1.05, 1.05, 0.14, 48);
-
-    const goldRimMat = new THREE.MeshStandardMaterial({
-      color: 0xe8cf88,
-      metalness: 0.92,
-      roughness: 0.16,
-      emissive: 0x94732a,
-      emissiveIntensity: 0.2,
-    });
-
+    const faceGeo = new THREE.CircleGeometry(1.06, 64);
     const faceMat = new THREE.MeshStandardMaterial({
       map: medallionTexture,
-      metalness: 0.45,
-      roughness: 0.22,
+      metalness: 0.35,
+      roughness: 0.25,
+      side: THREE.FrontSide,
     });
 
-    const medallionMesh = new THREE.Mesh(discGeo, [goldRimMat, faceMat, faceMat]);
-    medallionMesh.rotation.x = Math.PI / 2; // Face the camera
-    centralGroup.add(medallionMesh);
+    const frontMesh = new THREE.Mesh(faceGeo, faceMat);
+    frontMesh.position.z = 0.04;
+    medallionGroup.add(frontMesh);
+
+    const backMesh = new THREE.Mesh(faceGeo, faceMat);
+    backMesh.position.z = -0.04;
+    backMesh.rotation.y = Math.PI;
+    medallionGroup.add(backMesh);
+
+    // Outer Gold Rim (Torus in XY plane)
+    const rimGeo = new THREE.TorusGeometry(1.06, 0.055, 16, 72);
+    const rimMat = new THREE.MeshStandardMaterial({
+      color: 0xe8cf88,
+      metalness: 0.94,
+      roughness: 0.14,
+      emissive: 0x94732a,
+      emissiveIntensity: 0.25,
+    });
+    const rimMesh = new THREE.Mesh(rimGeo, rimMat);
+    medallionGroup.add(rimMesh);
 
     // Inner glowing point light inside medallion
     const innerLight = new THREE.PointLight(0xf4db96, 2.0, 6);
-    centralGroup.add(innerLight);
+    medallionGroup.add(innerLight);
 
     // B. Gyroscopic Cyber Ring 1 (Cyan)
     const gyroRing1Group = new THREE.Group();
     centralGroup.add(gyroRing1Group);
 
-    const ring1Geo = new THREE.TorusGeometry(1.68, 0.024, 16, 72);
+    const ring1Geo = new THREE.TorusGeometry(1.72, 0.024, 16, 72);
     const ring1Mat = new THREE.MeshStandardMaterial({
       color: 0x2fb8ff,
       emissive: 0x1e6bff,
@@ -211,7 +230,7 @@ export default function HeroMedallion3D() {
     const gyroRing2Group = new THREE.Group();
     centralGroup.add(gyroRing2Group);
 
-    const ring2Geo = new THREE.TorusGeometry(2.1, 0.024, 16, 72);
+    const ring2Geo = new THREE.TorusGeometry(2.15, 0.024, 16, 72);
     const ring2Mat = new THREE.MeshStandardMaterial({
       color: 0xf4db96,
       emissive: 0x94732a,
@@ -471,32 +490,34 @@ export default function HeroMedallion3D() {
       const elapsedTime = clock.getElapsedTime();
 
       // Gentle floating breathing pulse on central group
-      const pulse = 1 + Math.sin(elapsedTime * 2.0) * 0.05;
+      const pulse = 1 + Math.sin(elapsedTime * 2.0) * 0.04;
       centralGroup.scale.set(pulse, pulse, pulse);
 
-      // Floating wobble and slow rotation on 3D Medallion
-      medallionMesh.rotation.z = elapsedTime * 0.25; // Rotates medallion face
-      medallionMesh.rotation.x = Math.PI / 2 + Math.sin(elapsedTime * 1.5) * 0.12;
+      // Upright 3D Medallion: Gentle yaw/pitch float to catch light (NEVER spins sideways around Z!)
+      medallionGroup.rotation.y = Math.sin(elapsedTime * 0.9) * 0.22; // gentle left/right 12-degree turn
+      medallionGroup.rotation.x = Math.sin(elapsedTime * 0.7) * 0.08; // gentle up/down 5-degree tilt
+      medallionGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06; // floating hover
+      medallionGroup.rotation.z = 0; // strictly 0, NEVER sideways!
 
-      // Gyroscopic Ring 1 rotation (Cyan, continuous rotation on its plane)
+      // Gyroscopic Ring 1 rotation (Cyan, continuous rotation on its tilted orbital plane)
       ring1Mesh.rotation.z += 0.012;
       ring1Beads.forEach((bead, idx) => {
         const theta = elapsedTime * 1.2 + (idx * Math.PI) / 2;
-        bead.position.set(Math.cos(theta) * 1.68, Math.sin(theta) * 1.68, 0);
+        bead.position.set(Math.cos(theta) * 1.72, Math.sin(theta) * 1.72, 0);
       });
 
-      // Gyroscopic Ring 2 rotation (Gold, counter-rotation on its plane)
+      // Gyroscopic Ring 2 rotation (Gold, counter-rotation on its tilted orbital plane)
       ring2Mesh.rotation.z -= 0.009;
       ring2Beads.forEach((bead, idx) => {
         const theta = -elapsedTime * 0.9 + (idx * Math.PI) / 2;
-        bead.position.set(Math.cos(theta) * 2.1, Math.sin(theta) * 2.1, 0);
+        bead.position.set(Math.cos(theta) * 2.15, Math.sin(theta) * 2.15, 0);
       });
 
       // Apply drag rotation + subtle mouse parallax
       wireMesh.rotation.y = dragRotY - elapsedTime * 0.0025 + targetRotY * 0.02;
       wireMesh.rotation.x = dragRotX + targetRotX;
-      centralGroup.rotation.y = dragRotY * 0.5;
-      centralGroup.rotation.x = dragRotX * 0.5;
+      centralGroup.rotation.y = dragRotY * 0.4;
+      centralGroup.rotation.x = dragRotX * 0.4;
 
       // Orbiting nodes position update
       nodeSpheres.forEach((sphere) => {
@@ -535,9 +556,10 @@ export default function HeroMedallion3D() {
       scene.remove(wireMesh);
       scene.remove(nodeGroup);
 
-      discGeo.dispose();
-      goldRimMat.dispose();
+      faceGeo.dispose();
       faceMat.dispose();
+      rimGeo.dispose();
+      rimMat.dispose();
       medallionTexture.dispose();
       ring1Geo.dispose();
       ring1Mat.dispose();

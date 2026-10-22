@@ -4,14 +4,14 @@ import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { 
   ArrowRight, 
-  Sparkles, 
   Check, 
   Clock, 
   ShieldCheck, 
   MapPin, 
   Award,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Zap
 } from "lucide-react";
 
 import { Hero3DContainer } from "@/components/home/Hero3DContainer";
@@ -117,79 +117,82 @@ export default function HomePage() {
             {/* Left Side: Server-rendered HTML (Full brightness, zero edge masks) */}
             <div className="md:col-span-7 flex flex-col justify-center text-left">
               
-              {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-cyan-400/30 text-xs sm:text-sm font-semibold text-cyan-300 shadow-[0_0_20px_rgba(47,184,255,0.15)] mb-6 w-fit">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" aria-hidden="true" />
-                <span>Ludhiana HQ · Global Delivery</span>
+              {/* Eyebrow badge: Terminal prompt style matching Ankit's portfolio standard */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg glass-panel border border-cyan-400/30 text-xs font-mono text-cyan-300 shadow-sm mb-3.5 w-fit">
+                <span className="text-cyan-400 font-bold">&gt;_</span>
+                <span>Ludhiana HQ · Global Delivery Partner</span>
               </div>
 
-              {/* Main Headline with Native Typewriter Tagline */}
-              <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.14]">
-                <span className="block mb-2">Websites, AI Agents &amp; IT Infrastructure,</span>
-                <TypewriterHeadline
-                  phrases={[
-                    "Engineered to Scale Your Business.",
-                    "Autonomous 24/7 AI Chat Systems.",
-                    "High-Performance Web Platforms.",
-                    "Enterprise Cloud & IT Infrastructure.",
-                    "Direct Founder Engineering. Zero Bloat.",
-                  ]}
-                  className="text-2xl sm:text-4xl lg:text-5xl"
-                />
+              {/* Main Headline with Unified Production-Grade Typewriter Tagline */}
+              <h1 className="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-[1.2]">
+                <span className="block text-white">Engineering Production-Grade</span>
+                <span className="block mt-1 sm:mt-1.5 text-cyan-400 min-h-[1.25em]">
+                  <TypewriterHeadline
+                    phrases={[
+                      "Autonomous AI Chat Systems.",
+                      "High-Speed Web Platforms.",
+                      "Enterprise Cloud Infrastructure.",
+                      "Custom Software & Cloud APIs.",
+                      "Mission-Critical Web3 DApps.",
+                    ]}
+                    className="text-cyan-400 font-extrabold"
+                  />
+                </span>
               </h1>
 
-              {/* Honest Subheading */}
-              <p className="mt-5 text-base sm:text-lg text-mesh-text max-w-2xl leading-relaxed">
+              {/* Proof / Metric Pill Card (Sleek tech card matching portfolio standard) */}
+              <div className="mt-3.5 inline-flex flex-wrap items-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-xl bg-navy-950/90 border border-cyan-400/20 text-xs text-mesh-text shadow-sm w-fit">
+                <span className="text-cyan-400 font-semibold flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                  100% Custom Built
+                </span>
+                <span className="text-white/20 hidden sm:inline">•</span>
+                <span className="text-gray-300">Zero Templates</span>
+                <span className="text-white/20 hidden sm:inline">•</span>
+                <span className="text-gold-400 font-medium">Direct Founder Oversight</span>
+              </div>
+
+              {/* Compact Subheading (Not oversized, properly proportioned) */}
+              <p className="mt-3 text-xs sm:text-sm text-mesh-text max-w-xl leading-relaxed">
                 Syntrixmesh Solutions engineers custom web platforms, autonomous AI chat systems, and high-performance IT infrastructure for ambitious businesses worldwide. Direct founder engineering, zero bloated retainers.
               </p>
 
-              {/* Action Buttons: Primary "Get a Free Quote", Secondary "Explore Services" */}
-              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              {/* Action Buttons: Sleek, balanced height (42px) without oversized pill zoom */}
+              <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <Link
                   href="/get-quote"
-                  className="px-8 py-4 rounded-full font-semibold text-white text-base bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group text-center"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-white text-xs sm:text-sm bg-gradient-to-r from-cyan-500 via-blue-600 to-blue-700 shadow-md hover:shadow-cyan-glow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 group text-center"
                 >
                   <span>Get a Free Quote</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
 
                 <a
                   href="#services"
-                  className="px-7 py-4 rounded-full font-semibold text-white text-base glass-panel border border-cyan-400/30 hover:border-cyan-400/60 hover:text-cyan-300 transition-all duration-300 flex items-center justify-center gap-2 group text-center"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl font-medium text-white text-xs sm:text-sm glass-panel border border-cyan-400/25 hover:border-cyan-400/60 hover:text-cyan-300 transition-all duration-300 flex items-center justify-center gap-2 group text-center"
                 >
                   <span>Explore Services</span>
-                  <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-cyan-400" aria-hidden="true" />
+                  <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 text-cyan-400" aria-hidden="true" />
                 </a>
               </div>
 
-              {/* Truthful Trust Row (ONLY honest statements) */}
-              <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-mesh-text">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
-                  <span className="font-medium text-gray-200">Custom-built, never templates</span>
+              {/* Truthful Trust Row (Compact & clean) */}
+              <div className="mt-5 pt-3.5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] sm:text-xs text-mesh-text">
+                <div className="flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 stroke-[3]" />
+                  <span className="text-gray-300">Never templates</span>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
-                  <span className="font-medium text-gray-200">Direct founder access</span>
+                <div className="flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-gold-400 shrink-0 stroke-[3]" />
+                  <span className="text-gray-300">Direct founder access</span>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
-                  <span className="font-medium text-gray-200">AI + Web + IT under one roof</span>
+                <div className="flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 stroke-[3]" />
+                  <span className="text-gray-300">AI + Web + IT in one</span>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
-                  <span className="font-medium text-gray-200">Ludhiana HQ, global delivery</span>
+                <div className="flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-gold-400 shrink-0 stroke-[3]" />
+                  <span className="text-gray-300">Ludhiana HQ, global</span>
                 </div>
               </div>
 

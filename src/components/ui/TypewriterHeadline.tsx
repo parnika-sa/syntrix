@@ -11,18 +11,18 @@ interface TypewriterHeadlineProps {
 }
 
 const defaultPhrases = [
-  "Engineered to Scale Your Business.",
   "Autonomous 24/7 AI Chat Systems.",
   "High-Performance Web Platforms.",
   "Enterprise Cloud & IT Infrastructure.",
-  "Direct Founder Engineering. Zero Bloat.",
+  "Custom Full-Stack Engineering.",
+  "Direct Founder Oversight. Zero Bloat.",
 ];
 
 export default function TypewriterHeadline({
   phrases = defaultPhrases,
-  typingSpeed = 55,
-  deletingSpeed = 28,
-  pauseDuration = 1800,
+  typingSpeed = 50,
+  deletingSpeed = 26,
+  pauseDuration = 2000,
   className = "",
 }: TypewriterHeadlineProps) {
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -30,7 +30,6 @@ export default function TypewriterHeadline({
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    // Respect reduced motion: show first phrase statically
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setDisplayText(phrases[0]);
       return;
@@ -40,19 +39,16 @@ export default function TypewriterHeadline({
     let timer: NodeJS.Timeout;
 
     if (!isDeleting) {
-      // Typing phase
       if (displayText.length < currentPhrase.length) {
         timer = setTimeout(() => {
           setDisplayText(currentPhrase.slice(0, displayText.length + 1));
         }, typingSpeed);
       } else {
-        // Paused at full phrase
         timer = setTimeout(() => {
           setIsDeleting(true);
         }, pauseDuration);
       }
     } else {
-      // Deleting phase
       if (displayText.length > 0) {
         timer = setTimeout(() => {
           setDisplayText(currentPhrase.slice(0, displayText.length - 1));
@@ -67,13 +63,13 @@ export default function TypewriterHeadline({
   }, [displayText, isDeleting, phraseIndex, phrases, typingSpeed, deletingSpeed, pauseDuration]);
 
   return (
-    <span className={`inline-block relative min-h-[1.25em] ${className}`}>
-      <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-gold-400 font-extrabold">
+    <span className={`inline relative font-extrabold tracking-tight ${className}`}>
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-gold-400">
         {displayText}
       </span>
-      {/* Blinking Cyan Cursor */}
+      {/* Sleek Cyan Terminal Cursor */}
       <span
-        className="inline-block w-[3px] h-[0.9em] ml-1.5 align-middle bg-cyan-400 rounded-sm shadow-[0_0_10px_#2fb8ff] animate-[pulse_1s_infinite]"
+        className="inline-block w-[2.5px] sm:w-[3.5px] h-[0.9em] ml-1 sm:ml-1.5 align-middle bg-cyan-400 rounded-sm shadow-[0_0_10px_#2fb8ff] animate-[pulse_0.9s_infinite]"
         aria-hidden="true"
       />
     </span>
