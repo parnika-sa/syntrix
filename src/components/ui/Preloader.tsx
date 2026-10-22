@@ -2,96 +2,68 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function Preloader() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Only run for 1.6s so it doesn't block the user's workflow
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1600);
+    try {
+      // Skip entirely on mobile viewports (< 768px), reduced motion, or if already shown in session
+      const isMobile = window.innerWidth < 768;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hasShown = sessionStorage.getItem("syntrix_preloaded");
 
-    return () => clearTimeout(timer);
+      if (isMobile || prefersReducedMotion || hasShown) {
+        return;
+      }
+
+      sessionStorage.setItem("syntrix_preloaded", "true");
+      setLoading(true);
+
+      // Short duration under 1 second
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 700);
+
+      return () => clearTimeout(timer);
+    } catch {
+      // Graceful fallback for restricted storage environments
+    }
   }, []);
 
+  if (!loading) return null;
+
   return (
-    <AnimatePresence>
-      {loading && (
-        <motion.div
-          key="preloader"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#070B14] overflow-hidden"
-        >
-          {/* Futuristic Background Network Lines */}
-          <div className="absolute inset-0 bg-cyber-grid opacity-30" />
-          
-          {/* Radial ambient glow */}
-          <div className="absolute w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-[100px] pointer-events-none" />
+    <div
+      aria-hidden="true"
+      className="fixed inset-0 z-[10000] pointer-events-none flex flex-col items-center justify-center bg-[#070B14] transition-opacity duration-300"
+    >
+      <div className="relative flex items-center justify-center">
+        {/* Subtle CSS spinner ring */}
+        <div className="w-16 h-16 rounded-full border-2 border-cyan-400/30 border-t-cyan-400 animate-spin" />
 
-          {/* Center Logo with Animated Converging Rings */}
-          <div className="relative flex items-center justify-center">
-            {/* Outer spinning dash ring */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-              className="absolute w-36 h-36 rounded-full border border-dashed border-cyan-400/30"
-            />
+        {/* Center Logo */}
+        <div className="absolute w-11 h-11 rounded-full p-1 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
+          <Image
+            src="/logo.svg"
+            alt="Syntrixmesh Solutions"
+            width={40}
+            height={40}
+            className="w-full h-full object-contain"
+            priority
+          />
+        </div>
+      </div>
 
-            {/* Inner pulsating gold ring */}
-            <motion.div
-              animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.8, 0.4] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="absolute w-28 h-28 rounded-full border border-gold-400/40 shadow-gold-glow"
-            />
-
-            {/* Logo Badge */}
-            <motion.div
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-20 h-20 rounded-full p-1 bg-white shadow-cyan-glow-lg flex items-center justify-center overflow-hidden"
-            >
-              <Image
-                src="/logo.svg"
-                alt="Syntrixmesh Solutions Logo"
-                width={80}
-                height={80}
-                className="w-full h-full object-contain"
-                priority
-              />
-            </motion.div>
-          </div>
-
-          {/* Futuristic Branding & Progress */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="mt-8 text-center"
-          >
-            <h2 className="font-heading font-bold text-lg tracking-wider text-white">
-              SYNTRIX<span className="text-cyan-400">MESH</span>
-            </h2>
-            <p className="text-xs tracking-widest text-mesh-muted uppercase mt-1">
-              End-to-End Technology & Growth Partner
-            </p>
-
-            {/* Progress line */}
-            <div className="w-48 h-[2px] bg-navy-800 rounded-full mx-auto mt-4 overflow-hidden">
-              <motion.div
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1.4, ease: "easeInOut" }}
-                className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-gold-400"
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      <div className="mt-5 text-center">
+        <span className="font-heading font-bold text-sm tracking-widest text-white uppercase">
+          SYNTRIX<span className="text-cyan-400">MESH</span>
+        </span>
+        <p className="text-[10px] tracking-widest text-mesh-muted uppercase mt-0.5">
+          Loading Solutions...
+        </p>
+      </div>
+    </div>
   );
 }
+

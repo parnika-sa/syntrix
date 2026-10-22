@@ -35,7 +35,7 @@ const config: Config = {
         },
         mesh: {
           text: "#A8B3C7",
-          muted: "#64748B",
+          muted: "#94A3B8",
           card: "rgba(13, 21, 39, 0.7)",
           border: "rgba(47, 184, 255, 0.15)",
         },

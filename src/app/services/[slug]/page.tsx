@@ -14,11 +14,16 @@ import {
   MessageCircle, 
   PhoneCall 
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import SectionHeading from "@/components/ui/SectionHeading";
-import ServiceBackground from "@/components/canvas/ServiceBackground";
 import AnimatedTimeline from "@/components/ui/AnimatedTimeline";
 import FAQAccordion from "@/components/ui/FAQAccordion";
+
+const ServiceBackground = dynamic(
+  () => import("@/components/canvas/ServiceBackground"),
+  { ssr: false }
+);
 import { 
   servicesData, 
   getServiceBySlug, 
@@ -52,6 +57,9 @@ export async function generateMetadata({
   return {
     title: `${service.title} | Syntrixmesh Solutions`,
     description: service.overview,
+    alternates: {
+      canonical: `/services/${service.slug}`,
+    },
     openGraph: {
       title: `${service.title} | Syntrixmesh Solutions`,
       description: service.tagline,
@@ -74,8 +82,72 @@ export default function ServiceDetailPage({
   const Icon = serviceIcons[service.slug] || Code2;
   const otherServices = getOtherServices(service.slug);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteConfig.domain,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Services",
+            item: `${siteConfig.domain}/services`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: service.shortTitle,
+            item: `${siteConfig.domain}/services/${service.slug}`,
+          },
+        ],
+      },
+      {
+        "@type": "Service",
+        name: service.title,
+        description: service.overview,
+        provider: {
+          "@type": "LocalBusiness",
+          name: siteConfig.name,
+          telephone: siteConfig.contact.phone,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: siteConfig.contact.address.street,
+            addressLocality: siteConfig.contact.address.city,
+            addressRegion: siteConfig.contact.address.state,
+            postalCode: siteConfig.contact.address.pincode,
+            addressCountry: "IN",
+          },
+        },
+        areaServed: ["Ludhiana", "Punjab", "India", "Global"],
+        url: `${siteConfig.domain}/services/${service.slug}`,
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: service.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
+  };
+
   return (
     <div className="relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       
       {/* 1. HERO SECTION WITH SPECIALIZED ANIMATED BACKGROUND */}
       <section className="relative min-h-[75vh] flex items-center justify-center pt-8 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -163,7 +235,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 3. SUB-SERVICES AS FEATURE CARDS WITH 3D TILT & SPOTLIGHT */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
         <SectionHeading
           badge="DETAILED DELIVERABLES"
           title="What We Engineer"
@@ -211,7 +283,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 4. BENEFITS SECTION */}
-      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10">
+      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 content-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="MEASURABLE ROI"
@@ -244,7 +316,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 5. PROCESS TIMELINE */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
         <SectionHeading
           badge="EXECUTION PROTOCOL"
           title="From Discovery to Launch:"
@@ -259,7 +331,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 6. FAQ ACCORDION SECTION */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto content-auto">
         <SectionHeading
           badge="FREQUENTLY ASKED QUESTIONS"
           title="Questions About"
@@ -274,7 +346,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 7. FINAL BIG CTA BANNER */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
         <div className="rounded-3xl p-8 sm:p-14 glass-panel border border-cyan-400/30 bg-gradient-to-r from-navy-900 via-navy-850 to-[#070B14] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-cyan-500/15 blur-[80px] pointer-events-none" />
 

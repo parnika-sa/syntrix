@@ -1,36 +1,60 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Lenis from "lenis";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // If user prefers reduced motion, skip smooth scroll interception
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // 1. Completely disable on touch screens, mobile devices, and reduced-motion
+    if (
+      typeof window === "undefined" ||
+      window.innerWidth < 768 ||
+      "ontouchstart" in window ||
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-    });
+    let lenisInstance: { raf: (time: number) => void; destroy: () => void } | null = null;
+    let rafId: number | null = null;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    // 2. Defer loading Lenis until main thread is idle after first paint
+    const initLenis = async () => {
+      try {
+        const { default: Lenis } = await import("lenis");
+        lenisInstance = new Lenis({
+          duration: 1.1,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 0.9,
+        });
+
+        const raf = (time: number) => {
+          if (lenisInstance) {
+            lenisInstance.raf(time);
+            rafId = requestAnimationFrame(raf);
+          }
+        };
+        rafId = requestAnimationFrame(raf);
+      } catch {
+        // Fallback gracefully to native scroll
+      }
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => { void initLenis(); });
+    } else {
+      setTimeout(() => { void initLenis(); }, 300);
     }
 
-    const rafId = requestAnimationFrame(raf);
-
     return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
+      if (rafId) cancelAnimationFrame(rafId);
+      if (lenisInstance) lenisInstance.destroy();
     };
   }, []);
 
   return <>{children}</>;
 }
+

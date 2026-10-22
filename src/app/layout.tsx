@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -9,6 +9,8 @@ import SmoothScroll from "@/components/ui/SmoothScroll";
 import PageTransition from "@/components/ui/PageTransition";
 import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
 import { siteConfig } from "@/data/siteConfig";
+
+import CookieBanner from "@/components/ui/CookieBanner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -22,6 +24,13 @@ const inter = Inter({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#070B14",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
   title: {
@@ -32,21 +41,24 @@ export const metadata: Metadata = {
     "End-to-End Technology & Growth Partner. Custom software engineering, high-performance web applications, 24/7 AI chat automation, and physical enterprise IT infrastructure based in Ludhiana, Punjab with global delivery.",
   keywords: [
     "Syntrixmesh Solutions",
-    "Manmeet Singh Ludhiana",
-    "Web Application Development Punjab",
-    "Custom Software Engineering",
-    "AI Automation WhatsApp Bots",
-    "IT Infrastructure & Hardware Ludhiana",
+    "web development company in Ludhiana",
+    "custom software development in Punjab",
+    "AI chatbot and WhatsApp automation for business",
+    "IT hardware and workstation builds in Ludhiana",
+    "digital marketing and SEO services in Ludhiana",
+    "Web3 and smart contract development",
     "Next.js Developers India",
-    "Enterprise Cloud ERP",
-    "Web3 Dapps & Smart Contracts",
+    "Manmeet Singh Ludhiana",
   ],
+  alternates: {
+    canonical: "/",
+  },
   authors: [{ name: "Manmeet Singh", url: siteConfig.domain }],
   creator: "Manmeet Singh",
   publisher: "Syntrixmesh Solutions",
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: siteConfig.domain,
     title: "Syntrixmesh Solutions | End-to-End Technology & Growth Partner",
     description:
@@ -81,44 +93,74 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: siteConfig.name,
-  description: siteConfig.brandLine + " - Software, Web Apps, AI Automation & IT Infrastructure",
-  url: siteConfig.domain,
-  telephone: siteConfig.contact.phone,
-  email: siteConfig.contact.email,
-  founder: {
-    "@type": "Person",
-    name: siteConfig.founder.name,
-    jobTitle: siteConfig.founder.role,
-  },
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: siteConfig.contact.address.street,
-    addressLocality: siteConfig.contact.address.city,
-    addressRegion: siteConfig.contact.address.state,
-    postalCode: siteConfig.contact.address.pincode,
-    addressCountry: "IN",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 30.8521,
-    longitude: 75.8055,
-  },
-  openingHoursSpecification: [
+  "@graph": [
     {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "09:00",
-      closes: "20:00",
+      "@type": "Organization",
+      "@id": `${siteConfig.domain}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.domain,
+      logo: `${siteConfig.domain}/logo.png`,
+      email: siteConfig.contact.email,
+      telephone: siteConfig.contact.phone,
+      founder: {
+        "@type": "Person",
+        name: siteConfig.founder.name,
+        jobTitle: siteConfig.founder.role,
+      },
+      sameAs: [
+        siteConfig.socials.linkedin,
+        siteConfig.socials.twitter,
+        siteConfig.socials.github,
+        siteConfig.socials.instagram,
+      ],
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteConfig.domain}/#localbusiness`,
+      name: siteConfig.name,
+      image: `${siteConfig.domain}/logo.png`,
+      url: siteConfig.domain,
+      telephone: siteConfig.contact.phone,
+      email: siteConfig.contact.email,
+      priceRange: "$$",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: siteConfig.contact.address.street,
+        addressLocality: siteConfig.contact.address.city,
+        addressRegion: siteConfig.contact.address.state,
+        postalCode: siteConfig.contact.address.pincode,
+        addressCountry: "IN",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 30.8521,
+        longitude: 75.8055,
+      },
+      areaServed: [
+        { "@type": "City", name: "Ludhiana" },
+        { "@type": "AdministrativeArea", name: "Punjab" },
+        { "@type": "Country", name: "India" },
+      ],
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "10:00",
+          closes: "19:00",
+        },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.domain}/#website`,
+      url: siteConfig.domain,
+      name: siteConfig.name,
+      description: siteConfig.brandLine,
+      publisher: {
+        "@id": `${siteConfig.domain}/#organization`,
+      },
     },
   ],
-  sameAs: [
-    siteConfig.socials.linkedin,
-    siteConfig.socials.twitter,
-    siteConfig.socials.github,
-  ],
-  priceRange: "$$",
 };
 
 export default function RootLayout({
@@ -138,14 +180,18 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-[#070B14] text-mesh-text antialiased selection:bg-cyan-400 selection:text-navy-950`}
       >
         <SmoothScroll>
+          <a href="#main-content" className="skip-to-content">
+            Skip to main content
+          </a>
           <Preloader />
           <CustomCursor />
           <Navbar />
-          <main className="min-h-screen pt-20">
+          <main id="main-content" tabIndex={-1} className="min-h-screen pt-20 outline-none">
             <PageTransition>{children}</PageTransition>
           </main>
           <FloatingWhatsApp />
           <Footer />
+          <CookieBanner />
         </SmoothScroll>
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ import {
   Layers 
 } from "lucide-react";
 import { siteConfig } from "@/data/siteConfig";
-import { servicesData } from "@/data/services";
+import { servicesNav } from "@/data/services";
 import ServiceDropdown from "@/components/layout/ServiceDropdown";
 
 const serviceIcons: Record<string, React.ElementType> = {
@@ -37,6 +37,10 @@ export default function Navbar() {
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(true);
   const pathname = usePathname();
+
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +64,44 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = "";
       document.body.style.touchAction = "";
+    };
+  }, [mobileMenuOpen]);
+
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const timer = setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+      if (e.key === "Tab" && drawerRef.current) {
+        const focusables = drawerRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileMenuOpen]);
 
@@ -121,21 +163,42 @@ export default function Navbar() {
                 onMouseEnter={() => setServicesDropdownOpen(true)}
                 onMouseLeave={() => setServicesDropdownOpen(false)}
               >
-                <Link
-                  href="/services"
-                  className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    pathname.startsWith("/services")
-                      ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
-                      : "text-mesh-text hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  Services
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      servicesDropdownOpen ? "rotate-180 text-cyan-400" : ""
+                <div className="flex items-center">
+                  <Link
+                    href="/services"
+                    className={`px-3 py-2 rounded-l-full text-sm font-medium transition-all ${
+                      pathname.startsWith("/services")
+                        ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
+                        : "text-mesh-text hover:text-white hover:bg-white/5"
                     }`}
-                  />
-                </Link>
+                  >
+                    Services
+                  </Link>
+                  <button
+                    type="button"
+                    aria-label="Toggle services sub-menu"
+                    aria-haspopup="true"
+                    aria-expanded={servicesDropdownOpen}
+                    aria-controls="services-dropdown"
+                    onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setServicesDropdownOpen(true);
+                      }
+                      if (e.key === "Escape") {
+                        setServicesDropdownOpen(false);
+                      }
+                    }}
+                    className="px-2 py-2 rounded-r-full text-mesh-text hover:text-white hover:bg-white/5 focus-visible:outline-cyan-400 cursor-pointer"
+                  >
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                        servicesDropdownOpen ? "rotate-180 text-cyan-400" : ""
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 <ServiceDropdown
                   isOpen={servicesDropdownOpen}
@@ -205,6 +268,7 @@ export default function Navbar() {
                 Consult
               </Link>
               <button
+                ref={menuButtonRef}
                 onClick={() => setMobileMenuOpen(true)}
                 className="p-2 rounded-xl bg-navy-900 border border-cyan-400/20 text-white hover:text-cyan-400 transition-colors"
                 aria-label="Open navigation menu"
@@ -219,7 +283,11 @@ export default function Navbar() {
       {/* Full-Screen Mobile Drawer Overlay (Standalone Portal Element with z-[100]) */}
       {mobileMenuOpen && (
         <div
+          ref={drawerRef}
           data-lenis-prevent
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation Menu"
           className="lg:hidden fixed inset-0 z-[100] bg-[#070B14] flex flex-col h-[100dvh] w-screen overflow-hidden"
           style={{ touchAction: "auto" }}
         >
@@ -258,9 +326,13 @@ export default function Navbar() {
                 Consult
               </Link>
               <button
-                onClick={() => setMobileMenuOpen(false)}
+                ref={closeButtonRef}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  menuButtonRef.current?.focus();
+                }}
                 className="p-2 rounded-xl bg-navy-900 border border-cyan-400/30 text-white hover:text-cyan-400 transition-colors"
-                aria-label="Close menu"
+                aria-label="Close navigation menu"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -307,7 +379,7 @@ export default function Navbar() {
 
                 {mobileServicesOpen && (
                   <div className="pl-3 py-2 space-y-3">
-                    {servicesData.map((svc) => {
+                    {servicesNav.map((svc) => {
                       const Icon = serviceIcons[svc.id] || Code2;
                       return (
                         <Link

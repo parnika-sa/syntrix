@@ -1,8 +1,6 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { 
   ArrowRight, 
   Sparkles, 
@@ -18,17 +16,21 @@ import {
   Globe2, 
   Headphones, 
   Award,
-  ChevronRight,
-  Star
+  ChevronRight
 } from "lucide-react";
-import MeshNetworkBackground from "@/components/canvas/MeshNetworkBackground";
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Counter from "@/components/ui/Counter";
 import TechMarquee from "@/components/ui/TechMarquee";
+import TestimonialSlider from "@/components/ui/TestimonialSlider";
 import { siteConfig } from "@/data/siteConfig";
 import { servicesData } from "@/data/services";
-import { testimonials } from "@/data/testimonials";
+
+// Lazy-load canvas mesh visual only after page interactive / client mount
+const MeshNetworkBackground = dynamic(
+  () => import("@/components/canvas/MeshNetworkBackground"),
+  { ssr: false }
+);
 
 const serviceIcons: Record<string, React.ElementType> = {
   "development": Code2,
@@ -113,14 +115,12 @@ const processSteps = [
 ];
 
 export default function HomePage() {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-
   return (
     <div className="relative overflow-hidden">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative min-h-[92vh] flex items-center justify-center pt-8 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Animated 60fps Canvas Mesh Network */}
+      {/* 1. HERO SECTION (Server-rendered HTML for instant LCP) */}
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-8 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Lazy background mesh */}
         <MeshNetworkBackground />
 
         {/* Ambient Top Glow Orbs */}
@@ -129,55 +129,35 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           {/* Trust Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-cyan-400/30 text-xs sm:text-sm font-medium text-cyan-300 shadow-[0_0_20px_rgba(47,184,255,0.2)] mb-8"
-          >
-            <Sparkles className="w-4 h-4 text-cyan-400 animate-spin-slow" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-cyan-400/30 text-xs sm:text-sm font-medium text-cyan-300 shadow-[0_0_20px_rgba(47,184,255,0.2)] mb-8">
+            <Sparkles className="w-4 h-4 text-cyan-400 animate-spin-slow" aria-hidden="true" />
             <span className="font-semibold tracking-wide">End-to-End Technology & Growth Partner</span>
             <span className="hidden sm:inline-block text-mesh-muted">•</span>
             <span className="hidden sm:inline-block text-white/80">Ludhiana HQ · Global Delivery</span>
-          </motion.div>
+          </div>
 
-          {/* Main Headline with Text Reveal */}
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-[1.1] sm:leading-[1.12]"
-          >
+          {/* Main Headline (Immediate Server LCP element with zero JS delay) */}
+          <h1 className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-[1.1] sm:leading-[1.12]">
             We Build Technology That{" "}
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent underline decoration-cyan-400/40 decoration-wavy decoration-2">
               Grows Your Business
             </span>
             .
-          </motion.h1>
+          </h1>
 
           {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6 text-base sm:text-xl text-mesh-text max-w-3xl mx-auto leading-relaxed"
-          >
+          <p className="mt-6 text-base sm:text-xl text-mesh-text max-w-3xl mx-auto leading-relaxed">
             From high-speed web apps and 24/7 AI chat automation to robust physical IT infrastructure, cloud ERPs, and Web3 protocols. We architect the digital backbone for ambitious enterprises.
-          </motion.p>
+          </p>
 
           {/* Hero CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5"
-          >
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
             <Link
               href="/contact"
               className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-white text-base bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group"
             >
               <span>Get a Free Consultation</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
 
             <Link
@@ -185,42 +165,37 @@ export default function HomePage() {
               className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-white text-base glass-panel border border-cyan-400/30 hover:border-cyan-400/60 hover:text-cyan-400 transition-all duration-300 flex items-center justify-center gap-2 group"
             >
               <span>Explore All Services</span>
-              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-cyan-400" />
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-cyan-400" aria-hidden="true" />
             </Link>
-          </motion.div>
+          </div>
 
           {/* Micro Trust Points */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-12 pt-8 border-t border-cyan-400/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-mesh-text"
-          >
+          <div className="mt-12 pt-8 border-t border-cyan-400/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-mesh-text">
             <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>Sub-Second Load Times</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>Full IP & Code Ownership</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>24/7 Context AI Bots</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>Dedicated SLA Support</span>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* 2. TECH STACK MARQUEE */}
+      {/* 2. TECH STACK MARQUEE (Server Component) */}
       <TechMarquee />
 
       {/* 3. SERVICES OVERVIEW SECTION */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative content-auto">
         <SectionHeading
           badge="OUR CORE DISCIPLINES"
           title="Full-Spectrum Engineering"
@@ -241,7 +216,7 @@ export default function HomePage() {
                   {/* Category Header */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="w-14 h-14 rounded-2xl bg-navy-900 border border-cyan-400/25 flex items-center justify-center text-cyan-400 shadow-cyan-glow group-hover:scale-110 group-hover:border-cyan-400 transition-all duration-300">
-                      <Icon className="w-7 h-7" />
+                      <Icon className="w-7 h-7" aria-hidden="true" />
                     </div>
                     <span className="text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-navy-900 border border-cyan-400/20 text-cyan-300">
                       0{idx + 1}
@@ -260,7 +235,7 @@ export default function HomePage() {
                   <div className="space-y-2.5 pt-4 border-t border-cyan-400/10 mb-8">
                     {service.subServices.map((sub, sIdx) => (
                       <div key={sIdx} className="flex items-start gap-2.5 text-xs text-mesh-text">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
                         <span className="text-white/90 font-medium">{sub.title}</span>
                       </div>
                     ))}
@@ -273,7 +248,7 @@ export default function HomePage() {
                   className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors pt-2"
                 >
                   <span>Explore Capabilities</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" aria-hidden="true" />
                 </Link>
               </SpotlightCard>
             );
@@ -286,13 +261,13 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-white glass-panel border border-cyan-400/30 hover:border-cyan-400 hover:text-cyan-400 transition-all shadow-cyan-glow"
           >
             <span>Compare All 6 Services & Specifications</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
       </section>
 
       {/* 4. WHY CHOOSE US */}
-      <section className="py-24 bg-navy-900/40 border-y border-cyan-400/10 relative">
+      <section className="py-24 bg-navy-900/40 border-y border-cyan-400/10 relative content-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="THE SYNTRIXMESH ADVANTAGE"
@@ -310,7 +285,7 @@ export default function HomePage() {
                   className="p-8 rounded-2xl glass-panel border border-cyan-400/15 hover:border-cyan-400/40 transition-all duration-300 group hover:-translate-y-1"
                 >
                   <div className="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-400/30 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
-                    <Icon className="w-6 h-6" />
+                    <Icon className="w-6 h-6" aria-hidden="true" />
                   </div>
                   <h4 className="font-heading font-bold text-lg text-white mb-2 group-hover:text-cyan-400 transition-colors">
                     {item.title}
@@ -326,7 +301,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. PROCESS TIMELINE */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative content-auto">
         <SectionHeading
           badge="OUR METHODOLOGY"
           title="From Concept to Launch:"
@@ -372,7 +347,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. STATS COUNTERS */}
-      <section className="py-20 bg-gradient-to-b from-navy-900/60 to-navy-950 border-y border-cyan-400/15 relative">
+      <section className="py-20 bg-gradient-to-b from-navy-900/60 to-navy-950 border-y border-cyan-400/15 relative content-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {siteConfig.stats.map((stat, i) => (
@@ -392,8 +367,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. TESTIMONIALS SLIDER / SHOWCASE */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      {/* 7. TESTIMONIALS SLIDER */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative content-auto">
         <SectionHeading
           badge="PROVEN RESULTS"
           title="What Founders Say About"
@@ -402,53 +377,11 @@ export default function HomePage() {
           align="center"
         />
 
-        <div className="mt-12 max-w-4xl mx-auto">
-          <SpotlightCard className="p-8 sm:p-12 relative overflow-hidden">
-            <div className="flex items-center gap-1 mb-6 text-gold-400">
-              {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-gold-400 stroke-gold-400" />
-              ))}
-            </div>
-
-            <blockquote className="text-lg sm:text-2xl text-white font-heading font-medium leading-relaxed mb-8">
-              &ldquo;{testimonials[activeTestimonial].content}&rdquo;
-            </blockquote>
-
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-cyan-400/15">
-              <div>
-                <h5 className="font-heading font-bold text-white text-base">
-                  {testimonials[activeTestimonial].name}
-                </h5>
-                <p className="text-xs text-mesh-text">
-                  {testimonials[activeTestimonial].role} · <strong className="text-cyan-400">{testimonials[activeTestimonial].company}</strong> ({testimonials[activeTestimonial].location})
-                </p>
-                <span className="inline-block mt-1 text-[11px] font-semibold text-gold-400/90 uppercase tracking-wider">
-                  Service: {testimonials[activeTestimonial].service}
-                </span>
-              </div>
-
-              {/* Slider pagination dots */}
-              <div className="flex items-center gap-2">
-                {testimonials.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveTestimonial(idx)}
-                    aria-label={`Go to testimonial ${idx + 1}`}
-                    className={`h-2.5 rounded-full transition-all ${
-                      activeTestimonial === idx
-                        ? "w-8 bg-cyan-400 shadow-cyan-glow"
-                        : "w-2.5 bg-navy-700 hover:bg-navy-600"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </SpotlightCard>
-        </div>
+        <TestimonialSlider />
       </section>
 
-      {/* 8. FINAL BIG CTA BANNER & QUICK CONTACT TEASER */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      {/* 8. FINAL BIG CTA BANNER */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative content-auto">
         <div className="rounded-3xl p-8 sm:p-16 glass-panel border border-cyan-400/30 bg-gradient-to-br from-navy-900 via-navy-850 to-[#070B14] relative overflow-hidden">
           
           <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/15 rounded-full blur-[100px] pointer-events-none" />
@@ -478,7 +411,7 @@ export default function HomePage() {
                   className="px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-400 to-blue-600 shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 >
                   <span>Book Free 30-Min Strategy Call</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
 
                 <a
@@ -494,14 +427,14 @@ export default function HomePage() {
 
             {/* Quick Teaser Box */}
             <div className="lg:col-span-5 p-6 rounded-2xl glass-panel border border-cyan-400/20 bg-navy-950/70">
-              <h4 className="font-heading font-bold text-white text-lg mb-4 flex items-center gap-2">
-                <Award className="w-5 h-5 text-gold-400" />
+              <h3 className="font-heading font-bold text-white text-lg mb-4 flex items-center gap-2">
+                <Award className="w-5 h-5 text-gold-400" aria-hidden="true" />
                 Direct Communication Guarantee
-              </h4>
+              </h3>
 
               <div className="space-y-4 text-xs sm:text-sm text-mesh-text">
                 <div className="flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <Clock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <strong className="text-white block">2-Hour Rapid Response</strong>
                     Inquiries reviewed directly by principal engineers, not junior sales reps.
@@ -509,7 +442,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <strong className="text-white block">Strict NDA Protected</strong>
                     Your intellectual property, patents, and business concepts are 100% safeguarded.
@@ -517,7 +450,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Globe2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <Globe2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <strong className="text-white block">Global Remote Delivery</strong>
                     Seamless collaboration across IST, EST, PST, GMT, and GST time zones.

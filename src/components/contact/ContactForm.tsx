@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { LazyMotion, domAnimation, m, AnimatePresence } from "framer-motion";
 import { 
   Send, 
   CheckCircle2, 
@@ -11,7 +11,6 @@ import {
   Sparkles, 
   MessageCircle 
 } from "lucide-react";
-import confetti from "canvas-confetti";
 import { company } from "@/data/company";
 
 interface FormState {
@@ -150,12 +149,17 @@ export default function ContactForm() {
 
       // Success
       setIsSuccess(true);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#2FB8FF", "#1E6BFF", "#C9A24B", "#FFFFFF"],
-      });
+      try {
+        const { default: confetti } = await import("canvas-confetti");
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ["#2FB8FF", "#1E6BFF", "#C9A24B", "#FFFFFF"],
+        });
+      } catch {
+        // Continue normally if canvas-confetti is unavailable
+      }
 
       // Reset form
       setFormData({
@@ -193,68 +197,69 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="relative rounded-3xl p-6 sm:p-10 glass-panel border border-cyan-400/25 bg-navy-900/80 shadow-[0_10px_40px_-10px_rgba(47,184,255,0.15)] overflow-hidden">
-      
-      {/* Subtle Ambient Glow */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold-500/5 rounded-full blur-[80px] pointer-events-none" />
+    <LazyMotion features={domAnimation}>
+      <div className="relative rounded-3xl p-6 sm:p-10 glass-panel border border-cyan-400/25 bg-navy-900/80 shadow-[0_10px_40px_-10px_rgba(47,184,255,0.15)] overflow-hidden">
+        
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-gold-500/5 rounded-full blur-[80px] pointer-events-none" />
 
-      <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#2FB8FF]" />
-          <span className="text-xs uppercase tracking-widest text-cyan-400 font-semibold">
-            START YOUR PROJECT
-          </span>
-        </div>
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#2FB8FF]" />
+            <span className="text-xs uppercase tracking-widest text-cyan-400 font-semibold">
+              START YOUR PROJECT
+            </span>
+          </div>
 
-        <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white mb-2">
-          Send Us a Message
-        </h3>
-        <p className="text-sm text-mesh-text mb-8">
-          Fill out the form below. Principal architects will review your requirements within 2 to 4 business hours.
-        </p>
+          <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white mb-2">
+            Send Us a Message
+          </h3>
+          <p className="text-sm text-mesh-text mb-8">
+            Fill out the form below. Principal architects will review your requirements within 2 to 4 business hours.
+          </p>
 
-        {/* Success State View */}
-        <AnimatePresence>
-          {isSuccess && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="p-8 rounded-2xl bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 border border-cyan-400/40 shadow-cyan-glow text-center mb-8"
-            >
-              <div className="w-16 h-16 rounded-full bg-cyan-400/15 border-2 border-cyan-400 text-cyan-400 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(47,184,255,0.3)]">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
+          {/* Success State View */}
+          <AnimatePresence>
+            {isSuccess && (
+              <m.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="p-8 rounded-2xl bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 border border-cyan-400/40 shadow-cyan-glow text-center mb-8"
+              >
+                <div className="w-16 h-16 rounded-full bg-cyan-400/15 border-2 border-cyan-400 text-cyan-400 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(47,184,255,0.3)]">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
 
-              <h4 className="font-heading font-bold text-xl text-white mb-2">
-                Thank you! Your Message Has Been Sent.
-              </h4>
-              <p className="text-sm text-mesh-text max-w-md mx-auto mb-6 leading-relaxed">
-                Founder Manmeet Singh and our engineering team have received your request. We will review your project details and reach out within 24 hours.
-              </p>
+                <h4 className="font-heading font-bold text-xl text-white mb-2">
+                  Thank you! Your Message Has Been Sent.
+                </h4>
+                <p className="text-sm text-mesh-text max-w-md mx-auto mb-6 leading-relaxed">
+                  Founder Manmeet Singh and our engineering team have received your request. We will review your project details and reach out within 24 hours.
+                </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <button
-                  onClick={() => setIsSuccess(false)}
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold text-white glass-panel border border-cyan-400/30 hover:border-cyan-400 hover:text-cyan-400 transition-all"
-                >
-                  Send Another Inquiry
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button
+                    onClick={() => setIsSuccess(false)}
+                    className="px-6 py-2.5 rounded-full text-xs font-semibold text-white glass-panel border border-cyan-400/30 hover:border-cyan-400 hover:text-cyan-400 transition-all"
+                  >
+                    Send Another Inquiry
+                  </button>
 
-                <a
-                  href={company.contact.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-600 shadow-md hover:scale-105 transition-all flex items-center gap-1.5"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Chat on WhatsApp</span>
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <a
+                    href={company.contact.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-600 shadow-md hover:scale-105 transition-all flex items-center gap-1.5"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat on WhatsApp</span>
+                  </a>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
 
         {/* The Interactive Form */}
         {!isSuccess && (
@@ -517,5 +522,6 @@ export default function ContactForm() {
         )}
       </div>
     </div>
-  );
+  </LazyMotion>
+);
 }

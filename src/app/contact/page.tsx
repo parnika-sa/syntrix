@@ -13,17 +13,26 @@ import {
   FileText, 
   Rocket 
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import ContactForm from "@/components/contact/ContactForm";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FAQAccordion from "@/components/ui/FAQAccordion";
-import MeshNetworkBackground from "@/components/canvas/MeshNetworkBackground";
+import LazyMap from "@/components/ui/LazyMap";
 import { company } from "@/data/company";
 import { siteConfig } from "@/data/siteConfig";
+
+const MeshNetworkBackground = dynamic(
+  () => import("@/components/canvas/MeshNetworkBackground"),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: "Contact Us & Free Consultation",
   description:
     "Get in touch with Syntrixmesh Solutions in Ludhiana, Punjab. Request a free 30-minute architecture consultation for software development, AI automation, or IT infrastructure.",
+  alternates: {
+    canonical: "/contact",
+  },
   openGraph: {
     title: "Contact Syntrixmesh Solutions | Ludhiana & Global Delivery",
     description: "Start your project with our engineering leads. 24-hour response guarantee.",
@@ -241,22 +250,7 @@ export default function ContactPage() {
                 <span className="text-[10px] text-mesh-muted">Punjab, 142021</span>
               </div>
               
-              <div className="relative w-full h-56 overflow-hidden">
-                <iframe
-                  title="Syntrixmesh Solutions Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13693.425752317187!2d75.78912!3d30.85421!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a83d7350711ef%3A0x7d6a5e12fbb18b62!2sJhande%2C%20Ludhiana%2C%20Punjab%20142021!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{
-                    border: 0,
-                    filter: "invert(90%) hue-rotate(180deg) brightness(85%) contrast(90%)",
-                  }}
-                  allowFullScreen={false}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full"
-                />
-              </div>
+              <LazyMap />
             </div>
 
           </div>
@@ -265,7 +259,7 @@ export default function ContactPage() {
       </section>
 
       {/* 3. WHAT HAPPENS NEXT? (3-STEP TIMELINE) */}
-      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
         <SectionHeading
           badge="OUR ENGAGEMENT PROCESS"
           title="What Happens Next?"
@@ -309,7 +303,7 @@ export default function ContactPage() {
       </section>
 
       {/* 4. CONTACT FAQS */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto content-auto">
         <SectionHeading
           badge="COMMON INQUIRIES"
           title="Frequently Asked"
@@ -324,7 +318,7 @@ export default function ContactPage() {
       </section>
 
       {/* 5. FINAL CTA STRIP WITH WHATSAPP */}
-      <section className="pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
         <div className="rounded-3xl p-8 sm:p-12 glass-panel border border-cyan-400/30 bg-gradient-to-r from-navy-900 via-navy-850 to-navy-900 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
             <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider block">

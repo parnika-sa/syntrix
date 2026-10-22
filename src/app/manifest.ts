@@ -1,0 +1,26 @@
+import { MetadataRoute } from "next";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "Syntrixmesh Solutions",
+    short_name: "Syntrixmesh",
+    description:
+      "End-to-End Technology & Growth Partner based in Ludhiana, Punjab. Custom software, AI automation, high-performance web applications, and enterprise IT infrastructure.",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#070B14",
+    theme_color: "#070B14",
+    icons: [
+      {
+        src: "/logo.svg",
+        sizes: "any",
+        type: "image/svg+xml",
+      },
+      {
+        src: "/logo.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  };
+}

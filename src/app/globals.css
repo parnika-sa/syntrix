@@ -130,3 +130,43 @@ html.lenis, html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* Below-the-fold content visibility optimization */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 650px;
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid #2FB8FF;
+  outline-offset: 2px;
+}
+
+/* Accessible skip to main content link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background: #070B14;
+  color: #2FB8FF;
+  border: 2px solid #2FB8FF;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top 0.2s ease-in-out;
+}
+.skip-to-content:focus {
+  top: 1rem;
+}
+

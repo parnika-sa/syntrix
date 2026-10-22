@@ -8,7 +8,9 @@ import {
   Phone, 
   Mail, 
   ArrowUpRight, 
-  Heart
+  Heart,
+  Sliders,
+  ShieldCheck
 } from "lucide-react";
 import { 
   LinkedinIcon, 
@@ -17,7 +19,8 @@ import {
   InstagramIcon 
 } from "@/components/ui/BrandIcons";
 import { siteConfig } from "@/data/siteConfig";
-import { servicesData } from "@/data/services";
+import { servicesNav } from "@/data/services";
+import { openCookieBanner } from "@/components/ui/CookieBanner";
 
 export default function Footer() {
   return (
@@ -66,10 +69,10 @@ export default function Footer() {
 
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8">
           
           {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full p-0.5 bg-white shadow-cyan-glow flex items-center justify-center overflow-hidden">
                 <Image
@@ -81,7 +84,7 @@ export default function Footer() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-heading font-bold text-xl tracking-tight text-white group-hover:text-cyan-400 transition-colors">
+                <span className="font-heading font-bold text-lg tracking-tight text-white group-hover:text-cyan-400 transition-colors">
                   SYNTRIX<span className="text-cyan-400">MESH</span>
                 </span>
                 <span className="text-[10px] tracking-widest text-mesh-muted uppercase -mt-1 font-medium">
@@ -90,70 +93,70 @@ export default function Footer() {
               </div>
             </Link>
 
-            <p className="text-sm text-mesh-text leading-relaxed max-w-sm">
-              <strong className="text-white">{siteConfig.brandLine}</strong>. We architect bespoke web software, intelligent AI automations, and turnkey IT infrastructure designed for sustainable enterprise scale.
+            <p className="text-xs sm:text-sm text-mesh-text leading-relaxed">
+              <strong className="text-white">{siteConfig.brandLine}</strong>. Bespoke web software, AI automations, and turnkey IT infrastructure engineered for sustainable enterprise scale.
             </p>
 
-            <div className="pt-2 text-xs text-mesh-muted">
+            <div className="pt-1 text-xs text-mesh-muted">
               Founded & Architected by <span className="text-white font-medium">{siteConfig.founder.name}</span>
             </div>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2.5 pt-2">
               <a
                 href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
+                aria-label="Syntrixmesh on LinkedIn"
+                className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
               >
-                <LinkedinIcon className="w-4 h-4" />
+                <LinkedinIcon className="w-3.5 h-3.5" />
               </a>
               <a
                 href={siteConfig.socials.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="w-9 h-9 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
+                aria-label="Syntrixmesh on Twitter"
+                className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
               >
-                <TwitterIcon className="w-4 h-4" />
+                <TwitterIcon className="w-3.5 h-3.5" />
               </a>
               <a
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="w-9 h-9 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
+                aria-label="Syntrixmesh on GitHub"
+                className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
               >
-                <GithubIcon className="w-4 h-4" />
+                <GithubIcon className="w-3.5 h-3.5" />
               </a>
               <a
                 href={siteConfig.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
+                aria-label="Syntrixmesh on Instagram"
+                className="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-mesh-text hover:text-cyan-400 hover:border-cyan-400/40 transition-all"
               >
-                <InstagramIcon className="w-4 h-4" />
+                <InstagramIcon className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
 
           {/* Services Column */}
           <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+            <h4 className="font-heading font-semibold text-xs uppercase tracking-wider text-white mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               Our Services
             </h4>
-            <ul className="space-y-2.5 text-sm">
-              {servicesData.map((svc) => (
+            <ul className="space-y-2 text-xs sm:text-sm">
+              {servicesNav.map((svc) => (
                 <li key={svc.id}>
                   <Link
                     href={`/services/${svc.slug}`}
-                    className="hover:text-cyan-400 transition-colors flex items-center justify-between group"
+                    className="hover:text-cyan-400 transition-colors flex items-center justify-between group py-0.5"
                   >
                     <span>{svc.shortTitle}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
                   </Link>
                 </li>
               ))}
@@ -162,53 +165,103 @@ export default function Footer() {
 
           {/* Quick Links Column */}
           <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+            <h4 className="font-heading font-semibold text-xs uppercase tracking-wider text-white mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               Company
             </h4>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               <li>
-                <Link href="/about" className="hover:text-cyan-400 transition-colors">
+                <Link href="/about" className="hover:text-cyan-400 transition-colors block py-0.5">
                   About Our Firm
                 </Link>
               </li>
               <li>
-                <Link href="/about#founder" className="hover:text-cyan-400 transition-colors">
+                <Link href="/about#founder" className="hover:text-cyan-400 transition-colors block py-0.5">
                   Meet Founder Manmeet
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" className="hover:text-cyan-400 transition-colors">
+                <Link href="/portfolio" className="hover:text-cyan-400 transition-colors block py-0.5">
                   Case Studies & Proof
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-cyan-400 transition-colors">
+                <Link href="/services" className="hover:text-cyan-400 transition-colors block py-0.5">
                   Full Technology Stack
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-cyan-400 transition-colors">
-                  Request a Free Quote
+                <Link href="/contact" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Request Free Quote
                 </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Column */}
+          <div>
+            <h4 className="font-heading font-semibold text-xs uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              Legal & Policy
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li>
+                <Link href="/privacy-policy" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookie-policy" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund-policy" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Refund & Cancellation
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  Legal Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link href="/sitemap" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  HTML Sitemap
+                </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => openCookieBanner()}
+                  className="hover:text-cyan-400 text-mesh-muted transition-colors flex items-center gap-1.5 py-0.5 text-left cursor-pointer"
+                >
+                  <Sliders className="w-3 h-3 text-cyan-400" />
+                  <span>Cookie Settings</span>
+                </button>
               </li>
             </ul>
           </div>
 
           {/* Direct Contact Column */}
           <div>
-            <h4 className="font-heading font-semibold text-sm uppercase tracking-wider text-white mb-4 flex items-center gap-2">
+            <h4 className="font-heading font-semibold text-xs uppercase tracking-wider text-white mb-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
               Direct Contact
             </h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-3">
+            <ul className="space-y-3 text-xs sm:text-sm">
+              <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <span className="text-xs leading-relaxed text-mesh-text">
                   {siteConfig.contact.address.full}
                 </span>
               </li>
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-cyan-400 shrink-0" />
                 <a
                   href={`tel:${siteConfig.contact.phoneClean}`}
@@ -217,7 +270,7 @@ export default function Footer() {
                   {siteConfig.contact.phone}
                 </a>
               </li>
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
                 <a
                   href={`mailto:${siteConfig.contact.email}`}
@@ -229,7 +282,7 @@ export default function Footer() {
             </ul>
 
             <div className="mt-4 p-3 rounded-xl bg-navy-900/60 border border-gold-400/20 text-[11px] text-mesh-text">
-              <span className="text-gold-400 font-semibold block mb-0.5">Global Delivery:</span>
+              <span className="text-gold-400 font-semibold block mb-0.5">Ludhiana & Global:</span>
               Serving clients across India, North America, Europe, UAE & APAC.
             </div>
           </div>
@@ -240,7 +293,7 @@ export default function Footer() {
         <div className="mt-14 pt-8 border-t border-cyan-400/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mesh-muted">
           <p>© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Engineered with <Heart className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" /> for high-performance technology teams worldwide.
+            Engineered with <Heart className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" /> in Ludhiana, Punjab for high-growth businesses.
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Node {
   x: number;
@@ -14,22 +14,67 @@ interface Node {
 }
 
 export default function MeshNetworkBackground() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [shouldRenderCanvas, setShouldRenderCanvas] = useState(false);
 
   useEffect(() => {
+    // 1. Mobile & low-power detection
+    const isMobile = window.innerWidth < 768;
+    const isLowPower =
+      typeof navigator !== "undefined" &&
+      navigator.hardwareConcurrency &&
+      navigator.hardwareConcurrency <= 4;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // Use lightweight static CSS gradient & grid on mobile/low-power/reduced motion
+    if (isMobile || isLowPower || prefersReducedMotion) {
+      setShouldRenderCanvas(false);
+      return;
+    }
+
+    // 2. On capable desktop, mount only after idle
+    const startCanvas = () => {
+      setShouldRenderCanvas(true);
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(startCanvas);
+    } else {
+      setTimeout(startCanvas, 200);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRenderCanvas) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let animationFrameId: number;
+    let isVisible = true;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+
+    // Pause canvas animation when hero is scrolled out of view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
     const mouse = {
       x: -1000,
       y: -1000,
-      radius: 140,
+      radius: 120,
     };
 
     const handleResize = () => {
@@ -50,28 +95,27 @@ export default function MeshNetworkBackground() {
       mouse.y = -1000;
     };
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
-    // Color palette for nodes
     const colors = ["#2FB8FF", "#1E6BFF", "#69D2FF", "#C9A24B"];
     let nodes: Node[] = [];
 
     const initNodes = () => {
       nodes = [];
-      // Calculate node count based on viewport area
-      const count = Math.min(Math.floor((width * height) / 12000), 95);
+      // Reduced node count on desktop (max 38 instead of 95) for ultra-low CPU load
+      const count = Math.min(Math.floor((width * height) / 25000), 38);
       for (let i = 0; i < count; i++) {
-        const rad = Math.random() * 2 + 1.2;
+        const rad = Math.random() * 1.8 + 1.2;
         nodes.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.7,
-          vy: (Math.random() - 0.5) * 0.7,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
           radius: rad,
           baseRadius: rad,
-          alpha: Math.random() * 0.5 + 0.3,
+          alpha: Math.random() * 0.4 + 0.3,
           color: colors[Math.floor(Math.random() * colors.length)],
         });
       }
@@ -79,48 +123,39 @@ export default function MeshNetworkBackground() {
 
     initNodes();
 
+    const maxDistance = 120;
+    const mouseMaxDistance = 140;
+
     const render = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
-      // Render grid dots background subtle effect
-      const maxDistance = 130;
-      const mouseMaxDistance = 160;
-
-      // Update and draw nodes
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
-
-        // Move
         node.x += node.vx;
         node.y += node.vy;
 
-        // Bounce at boundaries
         if (node.x < 0 || node.x > width) node.vx *= -1;
         if (node.y < 0 || node.y > height) node.vy *= -1;
 
-        // Mouse interaction: push away or attract
         const dxMouse = mouse.x - node.x;
         const dyMouse = mouse.y - node.y;
         const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
 
         if (distMouse < mouseMaxDistance) {
           const force = (mouseMaxDistance - distMouse) / mouseMaxDistance;
-          node.x -= (dxMouse / distMouse) * force * 1.5;
-          node.y -= (dyMouse / distMouse) * force * 1.5;
-          node.radius = node.baseRadius + force * 2.5;
-
-          // Draw line to mouse
-          ctx.beginPath();
-          ctx.moveTo(node.x, node.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(47, 184, 255, ${0.4 * force})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
+          node.x -= (dxMouse / distMouse) * force * 1.2;
+          node.y -= (dyMouse / distMouse) * force * 1.2;
+          node.radius = node.baseRadius + force * 2;
         } else {
           node.radius = Math.max(node.baseRadius, node.radius - 0.05);
         }
 
-        // Draw connections between nodes
+        // Draw connections
         for (let j = i + 1; j < nodes.length; j++) {
           const nodeB = nodes[j];
           const dx = node.x - nodeB.x;
@@ -128,25 +163,22 @@ export default function MeshNetworkBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxDistance) {
-            const lineAlpha = (1 - dist / maxDistance) * 0.28;
+            const lineAlpha = (1 - dist / maxDistance) * 0.22;
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(nodeB.x, nodeB.y);
             ctx.strokeStyle = `rgba(47, 184, 255, ${lineAlpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 0.7;
             ctx.stroke();
           }
         }
 
-        // Draw node circle with soft glow
+        // Draw node circle
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
         ctx.fillStyle = node.color;
         ctx.globalAlpha = node.alpha;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = node.color;
         ctx.fill();
-        ctx.shadowBlur = 0;
         ctx.globalAlpha = 1.0;
       }
 
@@ -159,15 +191,25 @@ export default function MeshNetworkBackground() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [shouldRenderCanvas]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-auto w-full h-full z-0 opacity-80"
-      style={{ touchAction: "none" }}
-    />
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Universal CSS background grid (renders instantly on server, 0 JS cost) */}
+      <div className="absolute inset-0 bg-cyber-grid opacity-25" />
+
+      {/* Lightweight canvas for desktop clients after idle */}
+      {shouldRenderCanvas && (
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full opacity-70"
+          style={{ touchAction: "none" }}
+        />
+      )}
+    </div>
   );
 }
+

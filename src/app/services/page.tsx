@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: "Engineering Services & Solutions",
   description:
     "Explore our 6 core technology disciplines: Web & Mobile Development, Software Engineering, Digital Marketing, Physical IT Infrastructure, AI Chat Automation, and Web3 Dapps.",
+  alternates: {
+    canonical: "/services",
+  },
   openGraph: {
     title: "Engineering Services | Syntrixmesh Solutions",
     description: "Explore our 6 core technology disciplines from web platforms to AI and enterprise IT infrastructure.",

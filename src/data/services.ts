@@ -40,6 +40,66 @@ export interface ServiceCategory {
   faqs: FAQ[];
 }
 
+export interface ServiceNavItem {
+  id: string;
+  slug: string;
+  title: string;
+  shortTitle: string;
+  tagline: string;
+  oneLiner: string;
+}
+
+export const servicesNav: ServiceNavItem[] = [
+  {
+    id: "development",
+    slug: "development",
+    title: "Web & Mobile Development",
+    shortTitle: "Development",
+    tagline: "High-performance web apps & mobile solutions",
+    oneLiner: "Bespoke web apps, fast e-commerce & native-feel iOS/Android apps.",
+  },
+  {
+    id: "software-engineering",
+    slug: "software-engineering",
+    title: "Custom Software Engineering",
+    shortTitle: "Software",
+    tagline: "Enterprise cloud microservices & scalable backends",
+    oneLiner: "Type-safe microservices, custom ERPs, and resilient APIs.",
+  },
+  {
+    id: "digital-marketing",
+    slug: "digital-marketing",
+    title: "Digital Marketing & SEO",
+    shortTitle: "Marketing & SEO",
+    tagline: "Data-driven SEO & high-conversion ad campaigns",
+    oneLiner: "Technical SEO, Google Ads scaling, and performance marketing.",
+  },
+  {
+    id: "hardware-it",
+    slug: "hardware-it",
+    title: "IT Infrastructure & Hardware",
+    shortTitle: "IT & Hardware",
+    tagline: "Workstation builds & high-speed office networking",
+    oneLiner: "High-power workstations, UniFi networks & server deployments.",
+  },
+  {
+    id: "ai-chat-automation",
+    slug: "ai-chat-automation",
+    title: "AI Chat & Workflow Automation",
+    shortTitle: "AI Automation",
+    tagline: "24/7 autonomous WhatsApp bots & AI workflows",
+    oneLiner: "Autonomous WhatsApp bots, CRM automations & multi-turn AI agents.",
+  },
+  {
+    id: "web3-dapps",
+    slug: "web3-dapps",
+    title: "Web3 Protocols & Smart Contracts",
+    shortTitle: "Web3 & Blockchain",
+    tagline: "Secure smart contracts & audited dApps",
+    oneLiner: "Solidity smart contracts, token standards & DeFi integrations.",
+  },
+];
+
 export const servicesData: ServiceCategory[] = [
   {
     id: "development",
@@ -49,7 +109,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Full-Stack & Mobile Apps",
     tagline: "High-performance web applications, enterprise portals, and intuitive iOS/Android apps built for speed, scale, and conversion.",
     oneLiner: "Bespoke web apps, fast e-commerce stores, and native-feel iOS & Android apps.",
-    overview: "At Syntrixmesh Solutions, we engineer digital products that turn complex business workflows into fluid, sub-second web and mobile experiences. Utilizing Next.js 14 App Router, React Native, and type-safe microservices, we build scalable platforms that delight users and drive demonstrable business revenue.",
+    overview: "Recognized as a leading web development company in Ludhiana, Syntrixmesh Solutions engineers high-performance digital platforms that turn complex enterprise workflows into fluid, sub-second web and mobile experiences. Utilizing Next.js 14 App Router, React Native, and type-safe microservices, we build scalable platforms for businesses in Punjab and across global markets that delight users and drive measurable commercial revenue.",
     accentColor: "#2FB8FF",
     gradient: "from-[#2FB8FF] to-[#1E6BFF]",
     iconName: "Code2",
@@ -170,7 +230,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Core Architecture & APIs",
     tagline: "Enterprise-grade backend architectures, resilient microservices, high-throughput REST/GraphQL APIs, and legacy system modernization.",
     oneLiner: "Custom ERPs, resilient cloud microservices, and high-throughput API integrations.",
-    overview: "Software engineering is the backbone of high-volume digital business. Syntrixmesh Solutions designs fault-tolerant systems that eliminate data silos, automate operational bottlenecks, and perform reliably under intense enterprise concurrency.",
+    overview: "Software engineering is the backbone of modern enterprise scale. Specializing in custom software development in Punjab with international delivery, Syntrixmesh Solutions designs fault-tolerant cloud backends, custom ERPs, and distributed microservices that eliminate data silos, automate operational bottlenecks, and perform reliably under intense enterprise concurrency.",
     accentColor: "#1E6BFF",
     gradient: "from-[#1E6BFF] to-[#2FB8FF]",
     iconName: "Cpu",
@@ -291,7 +351,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Growth & Search Visibility",
     tagline: "Laser-focused Google Ads, data-driven technical SEO, and conversion funnels that transform search intent into recurring revenue.",
     oneLiner: "Targeted Google Ads, technical SEO audits, and high-converting B2B lead generation.",
-    overview: "Even extraordinary software needs high-intent distribution. Syntrixmesh Solutions combines deep technical expertise with growth marketing: we build high-converting landing pages, audit Core Web Vitals, and run precision Google Ads campaigns that generate measurable ROI.",
+    overview: "Even extraordinary software needs high-intent distribution. Syntrixmesh Solutions provides premier digital marketing and SEO services in Ludhiana, combining deep technical software expertise with performance growth marketing: we engineer sub-second landing pages, execute technical Core Web Vitals audits, and manage precision Google Ads campaigns that generate measurable B2B pipeline and ROI.",
     accentColor: "#C9A24B",
     gradient: "from-[#F4DB96] to-[#C9A24B]",
     iconName: "TrendingUp",
@@ -412,7 +472,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Enterprise IT & Workstations",
     tagline: "Industrial-grade PC hardware procurement, custom high-performance workstations, enterprise networking, and complete workplace IT deployments.",
     oneLiner: "Commercial PC supply, bespoke rendering workstations, UniFi networking & IT AMC.",
-    overview: "Software is only as dependable as the physical machines and networks powering it. Syntrixmesh Solutions delivers complete on-premise IT infrastructure for corporate offices, manufacturing plants, and creative studios. From server racks and UniFi WiFi mesh to custom multi-GPU workstations, we ensure your team never experiences hardware downtime.",
+    overview: "Software is only as dependable as the physical machines and networks powering it. Syntrixmesh Solutions is the premier partner for enterprise IT hardware and workstation builds in Ludhiana, delivering complete on-premise computing infrastructure for corporate headquarters, industrial manufacturing plants, and creative studios. From rackmount servers and UniFi WiFi mesh to custom multi-GPU rendering workstations, we ensure your team never faces hardware bottlenecks.",
     accentColor: "#2FB8FF",
     gradient: "from-[#2FB8FF] to-[#0A0F1C]",
     iconName: "Server",
@@ -533,7 +593,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Autonomous AI Agents",
     tagline: "Autonomous AI agents, 24/7 customer conversation bots, and context-aware business automations custom-trained on your internal business data.",
     oneLiner: "WhatsApp AI agents, 24/7 lead conversion bots, and RAG automation trained on your data.",
-    overview: "Turn manual customer support and repetitive business operations into automated competitive advantages. Syntrixmesh Solutions engineers intelligent AI agents powered by OpenAI, Claude, and local open-source LLMs that understand your product catalog, answer customer inquiries instantly, qualify leads, and trigger internal workflows round-the-clock.",
+    overview: "Turn manual customer support and repetitive business operations into autonomous competitive advantages. Syntrixmesh Solutions engineers custom AI chatbot and WhatsApp automation for business, powered by OpenAI, Claude, and local open-source LLMs. Trained on your exact company data, our 24/7 AI agents answer customer inquiries instantly, qualify leads, and trigger internal workflows round-the-clock.",
     accentColor: "#69D2FF",
     gradient: "from-[#69D2FF] to-[#1E6BFF]",
     iconName: "Bot",
@@ -654,7 +714,7 @@ export const servicesData: ServiceCategory[] = [
     badge: "Decentralized Systems & Smart Contracts",
     tagline: "Secure smart contracts, institutional tokenization protocols, interactive Web3 dApps, and audited blockchain integrations.",
     oneLiner: "Solidity smart contracts, tokenization protocols, and audited Web3 dApps.",
-    overview: "Web3 is reshaping how assets, identity, and ownership are transferred globally. Syntrixmesh Solutions engineers production-ready decentralized applications, Solidity and Rust smart contracts, and Web3 frontends with intuitive wallet onboarding for mainstream users.",
+    overview: "Web3 is reshaping how assets, identity, and ownership are transferred globally. Syntrixmesh Solutions specializes in institutional Web3 and smart contract development, engineering production-ready decentralized applications (dApps), Solidity and Rust smart contracts, real-world asset (RWA) tokenization protocols, and gas-optimized web interfaces with frictionless onboarding.",
     accentColor: "#C9A24B",
     gradient: "from-[#C9A24B] to-[#2FB8FF]",
     iconName: "Layers",

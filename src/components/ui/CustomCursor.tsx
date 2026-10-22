@@ -6,18 +6,24 @@ export default function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    // Check if touch device
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsTouchDevice(true);
+    // Completely disable on mobile screens (< 1024px) or coarse touch pointers
+    if (
+      typeof window === "undefined" ||
+      window.innerWidth < 1024 ||
+      "ontouchstart" in window ||
+      window.matchMedia("(pointer: coarse)").matches
+    ) {
       return;
     }
 
+    setEnabled(true);
+
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -33,18 +39,18 @@ export default function CustomCursor() {
       setIsVisible(false);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [isVisible]);
+  }, []);
 
-  if (isTouchDevice || !isVisible) return null;
+  if (!enabled || !isVisible) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
