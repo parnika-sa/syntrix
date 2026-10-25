@@ -57,7 +57,7 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="relative py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative py-16 sm:py-24 max-w-5xl mx-auto w-full" style={{ paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

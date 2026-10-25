@@ -91,7 +91,7 @@ export default function ContactPage() {
     <div className="relative overflow-hidden">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+      <section className="relative pt-12 pb-16 mx-auto w-full overflow-hidden" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         {/* Subtle mesh background */}
         <div className="absolute inset-0 opacity-40 pointer-events-none">
           <MeshNetworkBackground />
@@ -127,7 +127,7 @@ export default function ContactPage() {
       </section>
 
       {/* 2. TWO-COLUMN LAYOUT: FORM (LEFT) + INFO & MAP (RIGHT) */}
-      <section className="pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+      <section className="pb-24 mx-auto w-full relative z-10" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Left Column: Contact Form with Suspense for query param handling */}
@@ -278,7 +278,7 @@ export default function ContactPage() {
       </section>
 
       {/* 3. WHAT HAPPENS NEXT? (3-STEP TIMELINE) */}
-      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
+      <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 mx-auto w-full content-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <SectionHeading
           badge="OUR ENGAGEMENT PROCESS"
           title="What Happens Next?"
@@ -337,7 +337,7 @@ export default function ContactPage() {
       </section>
 
       {/* 5. FINAL CTA STRIP WITH WHATSAPP */}
-      <section className="pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
+      <section className="pb-24 mx-auto w-full content-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <div className="rounded-3xl p-8 sm:p-12 glass-panel border border-cyan-400/30 bg-gradient-to-r from-navy-900 via-navy-850 to-navy-900 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
             <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider block">

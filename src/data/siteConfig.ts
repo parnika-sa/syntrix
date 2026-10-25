@@ -1,9 +1,11 @@
 import { company } from "@/data/company";
+import { SHOW_PORTFOLIO } from "@/config/site";
 
-export { company };
+export { company, SHOW_PORTFOLIO };
 
 export const siteConfig = {
   ...company,
+  showPortfolio: SHOW_PORTFOLIO,
   stats: [
     { value: 150, suffix: "+", label: "Projects Delivered", detail: "Across Web, Cloud & IT" },
     { value: 98, suffix: "%", label: "Client Satisfaction", detail: "Consistently Rated 5 Stars" },
@@ -14,7 +16,8 @@ export const siteConfig = {
     { label: "Home", href: "/" },
     { label: "Services", href: "/services" },
     { label: "About", href: "/about" },
-    { label: "Portfolio", href: "/portfolio" },
+    ...(SHOW_PORTFOLIO ? [{ label: "Portfolio", href: "/portfolio" }] : []),
     { label: "Contact", href: "/contact" },
   ],
 };
+

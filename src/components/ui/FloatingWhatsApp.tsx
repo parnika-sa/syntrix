@@ -9,14 +9,18 @@ export default function FloatingWhatsApp() {
   return (
     <aside
       aria-label="Direct WhatsApp contact channel"
-      className="fixed bottom-6 right-5 sm:bottom-7 sm:right-7 z-40"
+      className="fixed z-40"
+      style={{
+        bottom: "calc(16px + env(safe-area-inset-bottom, 0px))",
+        right: "clamp(12px, 3vw, 28px)",
+      }}
     >
       <a
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp with Syntrixmesh Solutions"
-        className="group relative flex items-center h-12 sm:h-13 px-3.5 sm:px-4 rounded-full bg-[#070B14]/90 sm:backdrop-blur-md border border-cyan-400/40 hover:border-cyan-400 text-white shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+        className="group relative flex items-center justify-center w-12 h-12 sm:h-auto sm:w-auto sm:px-4 sm:py-3 rounded-full bg-[#070B14]/90 sm:backdrop-blur-md border border-cyan-400/40 hover:border-cyan-400 text-white shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all duration-300 hover:scale-105 active:scale-95"
       >
         {/* Subtle cyan pulse ring (disabled if user prefers reduced motion) */}
         <span
@@ -37,8 +41,8 @@ export default function FloatingWhatsApp() {
           </svg>
         </div>
 
-        {/* Expandable text pill on hover */}
-        <span className="max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2.5 transition-all duration-300 ease-out whitespace-nowrap text-xs font-semibold tracking-wide text-white">
+        {/* Expandable text pill on hover - only on desktop */}
+        <span className="hidden sm:inline max-w-0 overflow-hidden opacity-0 group-hover:max-w-xs group-hover:opacity-100 group-hover:ml-2.5 transition-all duration-300 ease-out whitespace-nowrap text-xs font-semibold tracking-wide text-white">
           Chat on WhatsApp
         </span>
       </a>

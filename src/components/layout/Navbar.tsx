@@ -21,7 +21,7 @@ import {
   BookOpen,
   Sparkles
 } from "lucide-react";
-import { siteConfig } from "@/data/siteConfig";
+import { siteConfig, SHOW_PORTFOLIO } from "@/data/siteConfig";
 import { servicesNav } from "@/data/services";
 import ServiceDropdown from "@/components/layout/ServiceDropdown";
 
@@ -63,7 +63,7 @@ export default function Navbar() {
   const handleServicesLeave = () => {
     servicesTimerRef.current = setTimeout(() => {
       setServicesDropdownOpen(false);
-    }, 200);
+    }, 450);
   };
 
   const handleResourcesEnter = () => {
@@ -76,7 +76,7 @@ export default function Navbar() {
   const handleResourcesLeave = () => {
     resourcesTimerRef.current = setTimeout(() => {
       setResourcesDropdownOpen(false);
-    }, 200);
+    }, 450);
   };
 
   useEffect(() => {
@@ -186,7 +186,7 @@ export default function Navbar() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full mx-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
           <div className="flex items-center justify-between">
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-3 group">
@@ -284,16 +284,19 @@ export default function Navbar() {
                 About
               </Link>
 
-              <Link
-                href="/portfolio"
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  pathname === "/portfolio"
-                    ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
-                    : "text-mesh-text hover:text-white hover:bg-white/5"
-                }`}
-              >
-                Portfolio
-              </Link>
+              {/* Portfolio link: controlled by SHOW_PORTFOLIO flag in src/config/site.ts */}
+              {SHOW_PORTFOLIO && (
+                <Link
+                  href="/portfolio"
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    pathname === "/portfolio"
+                      ? "bg-cyan-400/15 text-cyan-400 shadow-[0_0_12px_rgba(47,184,255,0.2)]"
+                      : "text-mesh-text hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  Portfolio
+                </Link>
+              )}
 
               {/* Resources Dropdown */}
               <div
@@ -337,7 +340,7 @@ export default function Navbar() {
                     id="resources-dropdown-panel"
                     onMouseEnter={handleResourcesEnter}
                     onMouseLeave={handleResourcesLeave}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl bg-navy-950/95 backdrop-blur-2xl border border-cyan-400/25 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(47,184,255,0.15)] z-[100] before:absolute before:-top-3 before:left-0 before:w-full before:h-3 before:content-[''] animate-fadeIn"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl bg-navy-950/95 backdrop-blur-2xl border border-cyan-400/25 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(47,184,255,0.15)] z-[100] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:content-[''] animate-fadeIn"
                   >
                     {/* Header accent */}
                     <div className="flex items-center justify-between pb-2 mb-2 border-b border-cyan-400/15 px-2">
@@ -587,13 +590,16 @@ export default function Navbar() {
                 About Us & Founder
               </Link>
 
-              <Link
-                href="/portfolio"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-xl font-heading font-semibold text-white hover:text-cyan-400 py-3 border-b border-navy-800/80 transition-colors"
-              >
-                Portfolio & Case Studies
-              </Link>
+              {/* Portfolio link: controlled by SHOW_PORTFOLIO flag in src/config/site.ts */}
+              {SHOW_PORTFOLIO && (
+                <Link
+                  href="/portfolio"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-xl font-heading font-semibold text-white hover:text-cyan-400 py-3 border-b border-navy-800/80 transition-colors"
+                >
+                  Portfolio & Case Studies
+                </Link>
+              )}
 
               {/* Collapsible Resources Group */}
               <div className="border-b border-navy-800/80 py-2">

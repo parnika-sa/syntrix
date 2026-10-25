@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function GetQuotePage() {
   return (
-    <div className="relative py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative py-16 sm:py-24 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       {/* 3D ambient constellation background */}
       <MeshNetworkBackground />
 

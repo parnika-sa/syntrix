@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { servicesData } from "@/data/services";
 import { blogPosts } from "@/data/blog";
 import { siteConfig } from "@/data/siteConfig";
+import { SHOW_PORTFOLIO } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.domain;
@@ -32,12 +33,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/portfolio`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.85,
-    },
+    ...(SHOW_PORTFOLIO
+      ? [
+          {
+            url: `${baseUrl}/portfolio`,
+            lastModified: currentDate,
+            changeFrequency: "weekly" as const,
+            priority: 0.85,
+          },
+        ]
+      : []),
     {
       url: `${baseUrl}/packages`,
       lastModified: currentDate,

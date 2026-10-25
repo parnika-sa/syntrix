@@ -128,7 +128,7 @@ export default function BlogDetailPage({
   };
 
   return (
-    <article className="relative py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <article className="relative py-12 sm:py-20 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

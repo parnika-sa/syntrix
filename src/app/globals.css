@@ -14,16 +14,20 @@
 html {
   background-color: #070B14;
   color: #FFFFFF;
+  overflow-x: clip;
 }
 
 body {
   background-color: #070B14;
   color: #A8B3C7;
-  overflow-x: hidden;
+  overflow-x: clip;
+  font-size: 16px;
+  line-height: 1.6;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 ::selection {
   background: #2FB8FF;
@@ -70,13 +74,31 @@ body {
   background-size: 40px 40px;
 }
 
-/* Glowing text gradients */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  line-height: 1.05;
+}
+
+h2 {
+  line-height: 1.1;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.04em;
+}
+
+/* Subtle restrained glow */
 .text-glow-cyan {
-  text-shadow: 0 0 20px rgba(47, 184, 255, 0.6);
+  text-shadow: 0 0 14px rgba(47, 184, 255, 0.35);
 }
 
 .text-glow-gold {
-  text-shadow: 0 0 20px rgba(201, 162, 75, 0.6);
+  text-shadow: 0 0 14px rgba(201, 162, 75, 0.35);
 }
 
 /* Vertical brand accent bar */
@@ -200,5 +222,23 @@ html.lenis, html.lenis body {
   .animate-route-flow {
     animation: none !important;
   }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
+/* Reduce heavy animations on mobile for performance */
+@media (max-width: 768px) {
+  .animate-float {
+    animation: none !important;
+  }
+}
+
+/* Ensure forms don't zoom on iOS */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -13,15 +13,24 @@ import { siteConfig } from "@/data/siteConfig";
 
 import CookieBanner from "@/components/ui/CookieBanner";
 
-const spaceGrotesk = Space_Grotesk({
+const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: ["600", "700", "800"],
+  variable: "--font-heading",
   display: "swap",
 });
 
-const inter = Inter({
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -181,7 +190,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-[#070B14] text-mesh-text antialiased selection:bg-cyan-400 selection:text-navy-950`}
+        className={`${bricolageGrotesque.variable} ${instrumentSans.variable} ${jetbrainsMono.variable} font-sans bg-[#070B14] text-mesh-text antialiased selection:bg-cyan-400 selection:text-navy-950 overflow-x-clip`}
       >
         <SmoothScroll>
           <ScrollManager />
@@ -191,7 +200,7 @@ export default function RootLayout({
           <Preloader />
           <CustomCursor />
           <Navbar />
-          <main id="main-content" tabIndex={-1} className="min-h-screen pt-20 outline-none">
+          <main id="main-content" tabIndex={-1} className="min-h-screen pt-20 outline-none overflow-x-clip">
             <PageTransition>{children}</PageTransition>
           </main>
           <FloatingWhatsApp />

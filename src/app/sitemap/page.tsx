@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { servicesNav } from "@/data/services";
 import { siteConfig } from "@/data/siteConfig";
+import { SHOW_PORTFOLIO } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "HTML Sitemap & Navigation Directory",
@@ -24,7 +25,15 @@ export const metadata: Metadata = {
 const mainPages = [
   { title: "Home", href: "/", desc: "End-to-End Technology & Growth Partner overview, core capabilities, client outcomes." },
   { title: "About Syntrixmesh", href: "/about", desc: "Our engineering philosophy, founder profile, and Ludhiana headquarters." },
-  { title: "Portfolio & Case Studies", href: "/portfolio", desc: "Headless e-commerce, AI agents, workstation setups, and custom web software." },
+  ...(SHOW_PORTFOLIO
+    ? [
+        {
+          title: "Portfolio & Case Studies",
+          href: "/portfolio",
+          desc: "Headless e-commerce, AI agents, workstation setups, and custom web software.",
+        },
+      ]
+    : []),
   { title: "All Services", href: "/services", desc: "Comprehensive breakdown of our six primary technology practice areas." },
   { title: "Get a Free Quote", href: "/get-quote", desc: "Interactive 3-step project scope configurator and direct proposal request." },
   { title: "Contact & Consultation", href: "/contact", desc: "Schedule a technical discovery session or reach our engineering desk." },
@@ -47,7 +56,7 @@ const legalPages = [
 
 export default function SitemapPage() {
   return (
-    <div className="relative py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative py-16 sm:py-24 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-400 border border-cyan-400/25 bg-cyan-400/5 mb-4">

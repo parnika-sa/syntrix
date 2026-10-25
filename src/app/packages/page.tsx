@@ -94,7 +94,7 @@ const comparisonFeatures = [
 
 export default function PackagesPage() {
   return (
-    <div className="relative py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative py-16 sm:py-24 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       {/* Background radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-mesh-radial pointer-events-none opacity-40" />
 

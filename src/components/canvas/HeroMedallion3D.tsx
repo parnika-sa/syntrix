@@ -20,7 +20,7 @@ const serviceNodesData = [
 ];
 
 function createMedallionTexture(): THREE.CanvasTexture {
-  const size = 512;
+  const size = 1024;
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
@@ -119,16 +119,15 @@ export default function HeroMedallion3D() {
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
     camera.position.set(0, 0, cameraZ);
 
-    // 3. Renderer with capped DPR and tone mapping
-    const isTouch = "ontouchstart" in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
-    const maxDpr = isTouch ? 1.0 : 1.5;
+    // 3. Renderer with high DPR support (crisp on mobile DPR 2 and 3)
+    const effectiveDpr = Math.min(window.devicePixelRatio || 1, 2.5);
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
+    renderer.setPixelRatio(effectiveDpr);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
 
@@ -450,6 +449,7 @@ export default function HeroMedallion3D() {
       camera.position.z = isSmall ? 14.5 : 12;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
       renderer.setSize(newWidth, newHeight);
     };
 

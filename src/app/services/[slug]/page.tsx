@@ -223,7 +223,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 2. OVERVIEW SECTION */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <section className="py-20 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <div className="rounded-3xl p-8 sm:p-14 glass-panel border border-cyan-400/20 bg-gradient-to-br from-navy-900/90 to-navy-950/90 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
 
@@ -241,7 +241,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 3. SUB-SERVICES AS FEATURE CARDS WITH 3D TILT & SPOTLIGHT */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
+      <section className="py-20 mx-auto w-full content-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <SectionHeading
           badge="DETAILED DELIVERABLES"
           title="What We Engineer"
@@ -298,7 +298,7 @@ export default function ServiceDetailPage({
 
       {/* 4. BENEFITS SECTION */}
       <section className="py-20 bg-navy-900/40 border-y border-cyan-400/10 content-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
           <SectionHeading
             badge="MEASURABLE ROI"
             title="Strategic Business Benefits"
@@ -330,7 +330,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 5. PROCESS TIMELINE */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
+      <section className="py-24 mx-auto w-full content-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <SectionHeading
           badge="EXECUTION PROTOCOL"
           title="From Discovery to Launch:"
@@ -360,7 +360,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 7. FINAL BIG CTA BANNER */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto content-auto">
+      <section className="py-20 mx-auto w-full content-auto" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <div className="rounded-3xl p-8 sm:p-14 glass-panel border border-cyan-400/30 bg-gradient-to-r from-navy-900 via-navy-850 to-[#070B14] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-cyan-500/15 blur-[80px] pointer-events-none" />
 
@@ -397,7 +397,7 @@ export default function ServiceDetailPage({
       </section>
 
       {/* 8. OTHER SERVICES STRIP */}
-      <section className="py-16 bg-navy-900/30 border-t border-cyan-400/10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-16 bg-navy-900/30 border-t border-cyan-400/10 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         <div className="flex items-center justify-between mb-8">
           <div>
             <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider block">

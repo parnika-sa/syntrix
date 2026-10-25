@@ -18,7 +18,7 @@ import {
   GithubIcon, 
   InstagramIcon 
 } from "@/components/ui/BrandIcons";
-import { siteConfig } from "@/data/siteConfig";
+import { siteConfig, SHOW_PORTFOLIO } from "@/data/siteConfig";
 import { servicesNav } from "@/data/services";
 import { openCookieBanner } from "@/components/ui/CookieBanner";
 
@@ -30,7 +30,7 @@ export default function Footer() {
       
       {/* Top CTA Bar */}
       <div className="border-b border-cyan-400/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div className="w-full mx-auto py-12 lg:py-16" style={{ maxWidth: '1360px', paddingInline: 'clamp(1rem, 4vw, 3rem)' }}>
           <div className="rounded-3xl p-8 sm:p-12 glass-panel border border-cyan-400/20 bg-gradient-to-r from-navy-900/90 via-navy-850/90 to-navy-900/90 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-cyan-500/10 blur-[80px] pointer-events-none" />
             <div className="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-gold-500/10 blur-[80px] pointer-events-none" />
@@ -68,7 +68,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Links */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="w-full mx-auto py-16" style={{ maxWidth: '1360px', paddingInline: 'clamp(1rem, 4vw, 3rem)' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8">
           
           {/* Brand Column */}
@@ -175,11 +175,14 @@ export default function Footer() {
                   About Our Firm
                 </Link>
               </li>
-              <li>
-                <Link href="/portfolio" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  Case Studies & Proof
-                </Link>
-              </li>
+              {/* Portfolio link: controlled by SHOW_PORTFOLIO flag in src/config/site.ts */}
+              {SHOW_PORTFOLIO && (
+                <li>
+                  <Link href="/portfolio" className="hover:text-cyan-400 transition-colors block py-0.5">
+                    Case Studies & Proof
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/packages" className="hover:text-cyan-400 transition-colors block py-0.5">
                   Engagement Packages

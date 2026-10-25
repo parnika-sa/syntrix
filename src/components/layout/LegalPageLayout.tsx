@@ -24,7 +24,7 @@ export default function LegalPageLayout({
   children,
 }: LegalPageLayoutProps) {
   return (
-    <div className="relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="relative overflow-hidden py-12 mx-auto w-full" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs text-mesh-muted mb-8" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-cyan-400 transition-colors">

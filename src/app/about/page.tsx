@@ -57,7 +57,7 @@ export default function AboutPage() {
       {/* Background radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-mesh-radial pointer-events-none opacity-40" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto w-full relative z-10" style={{ maxWidth: "1360px", paddingInline: "clamp(1rem, 4vw, 3rem)" }}>
         
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-20">

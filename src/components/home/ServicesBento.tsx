@@ -10,10 +10,8 @@ import {
   Server, 
   Boxes, 
   ArrowUpRight, 
-  Sparkles, 
   Check 
 } from "lucide-react";
-import Card3D from "@/components/ui/Card3D";
 
 interface BentoItem {
   id: string;
@@ -108,95 +106,99 @@ const bentoItems: BentoItem[] = [
 
 export function ServicesBento() {
   return (
-    <section id="services" className="relative py-16 md:py-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="relative overflow-hidden" style={{ paddingBlock: 'clamp(3.5rem, 6.5vw, 6.5rem)' }}>
+      <div style={{ maxWidth: '1360px', marginInline: 'auto', paddingInline: 'clamp(1rem, 4vw, 3rem)' }}>
         
-        {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-cyan-400 border border-cyan-400/25 bg-cyan-400/5 mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Core Engineering Disciplines</span>
+        {/* Editorial Section Heading — Left Aligned, Asymmetric */}
+        <div className="relative mb-12 sm:mb-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/10">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="font-mono text-xs uppercase tracking-widest text-cyan-400 font-semibold">
+                  {"// 01 · PRACTICE AREAS"}
+                </span>
+                <span className="text-white/20">|</span>
+                <span className="font-mono text-xs text-slate-300">CORE DISCIPLINES</span>
+              </div>
+              <h2 className="font-heading font-extrabold text-white tracking-[-0.03em]" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)' }}>
+                Six Disciplines. <span className="text-cyan-400">One Engineering Partner.</span>
+              </h2>
+            </div>
+            <p className="text-slate-200 text-sm sm:text-base max-w-md leading-relaxed font-normal">
+              Direct founder execution spanning autonomous AI chat agents, high-speed Next.js web applications, and enterprise workplace IT infrastructure.
+            </p>
           </div>
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight">
-            Six Core Disciplines,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-gold-400">
-              One Unified Partner.
-            </span>
-          </h2>
-          <p className="mt-4 text-mesh-muted text-base sm:text-lg leading-relaxed">
-            Eliminate communication gaps between separate web agencies, IT vendors, and AI developers. Syntrixmesh handles your complete technical lifecycle.
-          </p>
         </div>
 
-        {/* Bento Grid Container */}
-        <div className="grid grid-cols-12 gap-6">
-          {bentoItems.map((item) => {
+        {/* Bento Grid Container — Staggered, Varied Proportions */}
+        <div className="grid grid-cols-12 gap-6 items-stretch">
+          {bentoItems.map((item, idx) => {
             const Icon = item.icon;
+            const isOffset = idx === 3; // Stagger middle card vertically on desktop
 
             return (
               <div
                 key={item.id}
-                className={`${item.gridClass} h-full`}
+                className={`${item.gridClass} h-full ${isOffset ? "lg:translate-y-3" : ""}`}
               >
-                <Card3D
-                  glowColor={item.isFeatured ? "gold" : "cyan"}
-                  maxTilt={6}
-                  className="h-full rounded-3xl"
-                >
-                  <div className="relative h-full rounded-3xl p-6 sm:p-8 bg-navy-900/60 border border-white/10 group-hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg">
-                    {/* Top Strip */}
-                    <div>
-                      <div className="flex items-center justify-between gap-4 mb-6">
-                        <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:bg-cyan-500/20 transition-all">
-                          <Icon className="w-6 h-6" />
-                        </div>
-
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
-                          item.isFeatured
-                            ? "bg-gold-500/10 text-gold-300 border-gold-400/30"
-                            : "bg-white/5 text-mesh-muted border-white/10"
-                        }`}>
-                          {item.badge}
+                <div className="h-full rounded-2xl p-6 sm:p-8 bg-navy-900/70 border border-white/10 hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-md group">
+                  {/* Top Strip */}
+                  <div>
+                    <div className="flex items-center justify-between gap-4 mb-5">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs text-cyan-400/80 font-semibold tracking-wider">
+                          [ 0{idx + 1} ]
                         </span>
+                        <div className="w-9 h-9 rounded-lg bg-navy-950 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-400 transition-all">
+                          <Icon className="w-4 h-4" />
+                        </div>
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-heading font-bold text-white group-hover:text-cyan-300 transition-colors">
-                        {item.title}
-                      </h3>
-
-                      <p className="mt-2 text-xs sm:text-sm text-cyan-400/90 font-medium">
-                        {item.tagline}
-                      </p>
-
-                      <p className="mt-3 text-sm text-mesh-muted leading-relaxed">
-                        {item.oneLiner}
-                      </p>
+                      <span className={`px-2.5 py-1 rounded-md text-[11px] font-mono tracking-wide border ${
+                        item.isFeatured
+                          ? "bg-gold-500/10 text-gold-300 border-gold-400/30"
+                          : "bg-white/5 text-slate-300 border-white/10"
+                      }`}>
+                        {item.badge}
+                      </span>
                     </div>
 
-                    {/* Bottom Chips & Action Link */}
-                    <div className="mt-6 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex flex-wrap gap-2">
-                        {item.chips.map((chip, i) => (
-                          <span
-                            key={i}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-navy-950/80 text-gray-300 border border-white/5"
-                          >
-                            <Check className="w-3 h-3 text-cyan-400" />
-                            <span>{chip}</span>
-                          </span>
-                        ))}
-                      </div>
+                    <h3 className="text-xl sm:text-2xl font-heading font-bold text-white group-hover:text-cyan-400 transition-colors">
+                      {item.title}
+                    </h3>
 
-                      <Link
-                        href={`/services/${item.slug}`}
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors"
-                      >
-                        <span>Explore details</span>
-                        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </Link>
-                    </div>
+                    <p className="mt-1.5 text-xs sm:text-sm text-cyan-400 font-medium">
+                      {item.tagline}
+                    </p>
+
+                    <p className="mt-3 text-sm text-slate-200 leading-relaxed font-normal">
+                      {item.oneLiner}
+                    </p>
                   </div>
-                </Card3D>
+
+                  {/* Bottom Chips & Action Link */}
+                  <div className="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-1.5">
+                      {item.chips.map((chip, i) => (
+                        <span
+                          key={i}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-mono bg-navy-950 text-slate-200 border border-white/10"
+                        >
+                          <Check className="w-3 h-3 text-cyan-400" />
+                          <span>{chip}</span>
+                        </span>
+                      ))}
+                    </div>
+
+                    <Link
+                      href={`/services/${item.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors mt-1"
+                    >
+                      <span>Explore details</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             );
           })}

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { 
   FolderGit2, 
   ArrowUpRight, 
@@ -12,19 +13,36 @@ import {
 import Card3D from "@/components/ui/Card3D";
 import { portfolioProjects } from "@/data/portfolio";
 import { siteConfig } from "@/data/siteConfig";
+import { SHOW_PORTFOLIO } from "@/config/site";
 
-export const metadata: Metadata = {
-  title: "Case Studies & Client Portfolio | Syntrixmesh Solutions",
-  description:
-    "Explore our enterprise case studies: custom ERP systems in Ludhiana, AI WhatsApp automations, headless e-commerce, multi-GPU workstation setups, and Web3 smart contracts.",
-  alternates: {
-    canonical: "/portfolio",
-  },
-};
+// NOTE: To re-enable the portfolio page across the site, set SHOW_PORTFOLIO = true in @/config/site
+export const metadata: Metadata = SHOW_PORTFOLIO
+  ? {
+      title: "Case Studies & Client Portfolio | Syntrixmesh Solutions",
+      description:
+        "Explore our enterprise case studies: custom ERP systems in Ludhiana, AI WhatsApp automations, headless e-commerce, multi-GPU workstation setups, and Web3 smart contracts.",
+      alternates: {
+        canonical: "/portfolio",
+      },
+    }
+  : {
+      title: "Page Not Found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
 
 export default function PortfolioPage() {
+  // If the portfolio is temporarily hidden via site flag, return 404 notFound()
+  // TO BRING BACK: set SHOW_PORTFOLIO = true in src/config/site.ts
+  if (!SHOW_PORTFOLIO) {
+    notFound();
+  }
+
   return (
     <div className="relative py-16 sm:py-24">
+
       {/* Background ambient mesh glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-mesh-radial pointer-events-none opacity-40" />
 
